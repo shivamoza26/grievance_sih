@@ -7,7 +7,13 @@ authors = [
     { name = "shivamoza26", email = "shivamoza2006@gmail.com" }
 ]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "fastapi>=0.141.1",
+    "psycopg2-binary>=2.9.12",
+    "pydantic[email]>=2.13.4",
+    "sqlalchemy>=2.0.52",
+    "uvicorn[standard]>=0.52.3",
+]
 
 [project.scripts]
 backend = "backend:main"
