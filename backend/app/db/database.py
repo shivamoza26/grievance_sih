@@ -12,8 +12,3 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
-
-
-if __name__ == "__main__":
-    with engine.connect() as connection:
-        print("Database connection successful!")
