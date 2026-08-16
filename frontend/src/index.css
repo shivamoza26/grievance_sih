@@ -1,14 +1,207 @@
-@import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+@import "tailwindcss";
+
+/* =========================================================
+   GRIEVANCE AI — GLOBAL DESIGN SYSTEM
+   ========================================================= */
+
 :root {
-  font-family: 'Inter', sans-serif;
+  /* Brand colors */
+  --color-charcoal: #312F2C;
+  --color-charcoal-dark: #211F1D;
+
+  --color-jade-light: #ABD1C6;
+  --color-jade: #A1C6B9;
+  --color-jade-dark: #587F73;
+
+  /* Backgrounds */
+  --color-background: #FFFFFF;
+  --color-background-soft: #F4F7F5;
+  --color-background-muted: #EDF2EF;
+
+  /* Text */
+  --color-text: #312F2C;
+  --color-text-secondary: #626A67;
+  --color-text-muted: #7A8580;
+
+  /* Borders */
+  --color-border: #DDE3E0;
+  --color-border-dark: #C8D2CE;
+
+  /* Status */
+  --color-success: #587F73;
+  --color-success-bg: #E4F0EB;
+
+  --color-warning: #A87935;
+  --color-warning-bg: #F5EEDF;
+
+  --color-danger: #A34F4F;
+  --color-danger-bg: #F7E8E8;
+
+  /* Typography */
+  font-family: "Inter", system-ui, sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* =========================================================
+   GLOBAL RESET
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #f8fafc;
-  color: #0f172a;
+  min-height: 100vh;
+
+  background: var(--color-background);
+  color: var(--color-text);
+
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+input,
+textarea,
+select {
+  color: var(--color-text);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9AA39F;
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   TEXT SELECTION
+   ========================================================= */
+
+::selection {
+  background: var(--color-jade-light);
+  color: var(--color-charcoal);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F4F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B7C2BE;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-jade-dark);
+}
+
+
+/* =========================================================
+   ACCESSIBILITY / FOCUS
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--color-jade-dark);
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   COMMON UTILITY CLASSES
+   ========================================================= */
+
+.grievance-primary {
+  background: var(--color-charcoal);
+  color: #FFFFFF;
+}
+
+.grievance-primary:hover {
+  background: var(--color-charcoal-dark);
+}
+
+.grievance-secondary {
+  background: var(--color-jade-light);
+  color: var(--color-charcoal);
+}
+
+.grievance-secondary:hover {
+  background: var(--color-jade);
+}
+
+.grievance-surface {
+  background: var(--color-background);
+}
+
+.grievance-soft {
+  background: var(--color-background-soft);
+}
+
+.grievance-border {
+  border-color: var(--color-border);
+}
+
+.grievance-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.grievance-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.grievance-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
 }
