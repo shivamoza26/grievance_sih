@@ -1,9 +1,9 @@
 from datetime import datetime
+
 from pydantic import BaseModel
 
 
 class GrievanceCreate(BaseModel):
-    citizen_id: int
     description: str
     location: str | None = None
 
@@ -25,3 +25,12 @@ class GrievanceResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+
+class GrievanceStatusUpdate(BaseModel):
+    new_status: str
+    comment: str | None = None
+
+
+class GrievanceReplyCreate(BaseModel):
+    comment: str
