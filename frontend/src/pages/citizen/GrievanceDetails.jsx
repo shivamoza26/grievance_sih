@@ -20,17 +20,19 @@ import GrievanceTimeline from "../../components/citizen/GrievanceTimeline";
 import { mockGrievances } from "../../mocks/grievances";
 
 const GrievanceDetails = () => {
-  // Get grievance ID from URL
+  // =====================================================
+  // GET GRIEVANCE
+  // =====================================================
+
   const { id } = useParams();
 
-  // Find the selected grievance
   const grievance = mockGrievances.find(
     (item) => item.id === id
   );
 
-  // --------------------------------------------------
+  // =====================================================
   // GRIEVANCE NOT FOUND
-  // --------------------------------------------------
+  // =====================================================
 
   if (!grievance) {
     return (
@@ -40,22 +42,32 @@ const GrievanceDetails = () => {
       >
         <div className="max-w-3xl mx-auto py-20 text-center">
 
-          <div className="mx-auto w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center">
+          <div className="mx-auto w-14 h-14 rounded-full bg-[#EEF1EF] text-[#7A8580] flex items-center justify-center">
             <MessageSquare size={24} />
           </div>
 
-          <h1 className="mt-5 text-2xl font-bold text-slate-900">
+          <h1 className="mt-5 text-2xl font-bold text-[#312F2C]">
             Grievance not found
           </h1>
 
-          <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
+          <p className="mt-2 text-sm text-[#7A8580] max-w-md mx-auto">
             The grievance you are looking for does not exist
             or may have been removed.
           </p>
 
           <Link
             to="/citizen/grievances"
-            className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-blue-700 hover:text-blue-800 transition"
+            className="
+              inline-flex
+              items-center
+              gap-2
+              mt-6
+              text-sm
+              font-medium
+              text-[#587F73]
+              hover:text-[#312F2C]
+              transition
+            "
           >
             <ArrowLeft size={16} />
             Back to My Grievances
@@ -66,15 +78,28 @@ const GrievanceDetails = () => {
     );
   }
 
-  // --------------------------------------------------
+  // =====================================================
   // DERIVED DATA
-  // --------------------------------------------------
+  // =====================================================
 
   const confidencePercentage = Math.round(
     grievance.confidence * 100
   );
 
   const priority = grievance.priority || "HIGH";
+
+  const isPending =
+    grievance.status === "PENDING";
+
+  const isInProgress =
+    grievance.status === "IN_PROGRESS";
+
+  const isResolved =
+    grievance.status === "RESOLVED";
+
+  // =====================================================
+  // ACTIVITY HISTORY
+  // =====================================================
 
   const activities = [
     {
@@ -101,14 +126,36 @@ const GrievanceDetails = () => {
       completed: true,
     },
 
-    {
-      title: "Officer reviewing complaint",
-      description:
-        "The assigned officer is currently reviewing your grievance.",
-      time: "In progress",
-      completed: false,
-    },
+    ...(isResolved
+      ? [
+          {
+            title: "Grievance resolved",
+            description:
+              "Your grievance has been successfully resolved.",
+            time: "Today",
+            completed: true,
+          },
+        ]
+      : [
+          {
+            title: "Officer reviewing complaint",
+            description:
+              "The assigned officer is currently reviewing your grievance.",
+            time: "In progress",
+            completed: false,
+          },
+        ]),
   ];
+
+  // =====================================================
+  // STATUS TEXT
+  // =====================================================
+
+  const currentStatusText = isPending
+    ? "Pending"
+    : isResolved
+    ? "Resolved"
+    : "In Progress";
 
   return (
     <DashboardLayout
@@ -123,11 +170,21 @@ const GrievanceDetails = () => {
 
         <Link
           to="/citizen/grievances"
-          className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 transition"
+          className="
+            inline-flex
+            items-center
+            gap-2
+            text-sm
+            font-medium
+            text-[#7A8580]
+            hover:text-[#312F2C]
+            transition
+          "
         >
           <ArrowLeft size={16} />
           Back to My Grievances
         </Link>
+
 
         {/* =================================================
             HEADER
@@ -137,13 +194,13 @@ const GrievanceDetails = () => {
 
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
 
-            <div className="min-w-0">
+            {/* Main information */}
 
-              {/* ID + STATUS */}
+            <div className="min-w-0">
 
               <div className="flex items-center gap-3 flex-wrap">
 
-                <span className="text-sm font-semibold text-slate-400">
+                <span className="text-sm font-semibold text-[#8A9590]">
                   {grievance.id}
                 </span>
 
@@ -153,17 +210,18 @@ const GrievanceDetails = () => {
 
               </div>
 
-              {/* TITLE */}
 
-              <h1 className="mt-3 text-3xl lg:text-4xl font-bold tracking-tight text-slate-900">
+              <h1 className="mt-3 text-3xl lg:text-4xl font-bold tracking-tight text-[#312F2C]">
                 {grievance.title}
               </h1>
 
-              {/* LOCATION */}
 
-              <div className="mt-4 flex items-center gap-2 text-sm text-slate-500">
+              <div className="mt-4 flex items-center gap-2 text-sm text-[#7A8580]">
 
-                <MapPin size={16} />
+                <MapPin
+                  size={16}
+                  className="text-[#587F73]"
+                />
 
                 <span>
                   {grievance.location}
@@ -173,22 +231,36 @@ const GrievanceDetails = () => {
 
             </div>
 
-            {/* SUBMITTED */}
 
-            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shrink-0">
+            {/* Submitted date */}
+
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                border
+                border-[#DDE3E0]
+                bg-white
+                px-4
+                py-3
+                shrink-0
+              "
+            >
 
               <CalendarDays
                 size={18}
-                className="text-slate-400"
+                className="text-[#587F73]"
               />
 
               <div>
 
-                <p className="text-[11px] uppercase tracking-wide font-semibold text-slate-400">
+                <p className="text-[11px] uppercase tracking-wide font-semibold text-[#8A9590]">
                   Submitted
                 </p>
 
-                <p className="mt-0.5 text-sm font-medium text-slate-700">
+                <p className="mt-0.5 text-sm font-medium text-[#626A67]">
                   {grievance.submittedAt}
                 </p>
 
@@ -199,6 +271,7 @@ const GrievanceDetails = () => {
           </div>
 
         </div>
+
 
         {/* =================================================
             QUICK STATUS SUMMARY
@@ -212,22 +285,18 @@ const GrievanceDetails = () => {
 
             <div className="flex items-center gap-3">
 
-              <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-[#E4F0EB] text-[#587F73] flex items-center justify-center">
                 <Clock3 size={18} />
               </div>
 
               <div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   Current Status
                 </p>
 
-                <p className="mt-1 text-sm font-semibold text-slate-900">
-                  {grievance.status === "PENDING"
-                    ? "Pending"
-                    : grievance.status === "RESOLVED"
-                    ? "Resolved"
-                    : "In Progress"}
+                <p className="mt-1 text-sm font-semibold text-[#312F2C]">
+                  {currentStatusText}
                 </p>
 
               </div>
@@ -236,23 +305,24 @@ const GrievanceDetails = () => {
 
           </Card>
 
+
           {/* PRIORITY */}
 
           <Card>
 
             <div className="flex items-center gap-3">
 
-              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-[#F5EEDF] text-[#8A642F] flex items-center justify-center">
                 <Flag size={18} />
               </div>
 
               <div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   Priority
                 </p>
 
-                <p className="mt-1 text-sm font-semibold text-slate-900">
+                <p className="mt-1 text-sm font-semibold text-[#312F2C]">
                   {priority}
                 </p>
 
@@ -262,23 +332,24 @@ const GrievanceDetails = () => {
 
           </Card>
 
+
           {/* DEPARTMENT */}
 
           <Card>
 
             <div className="flex items-center gap-3">
 
-              <div className="w-9 h-9 rounded-lg bg-violet-50 text-violet-700 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-[#EAF3F0] text-[#587F73] flex items-center justify-center">
                 <Building2 size={18} />
               </div>
 
               <div className="min-w-0">
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   Department
                 </p>
 
-                <p className="mt-1 text-sm font-semibold text-slate-900 truncate">
+                <p className="mt-1 text-sm font-semibold text-[#312F2C] truncate">
                   {grievance.department}
                 </p>
 
@@ -288,23 +359,24 @@ const GrievanceDetails = () => {
 
           </Card>
 
-          {/* CONFIDENCE */}
+
+          {/* AI CONFIDENCE */}
 
           <Card>
 
             <div className="flex items-center gap-3">
 
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-[#DCEBE5] text-[#4B6D63] flex items-center justify-center">
                 <Sparkles size={18} />
               </div>
 
               <div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   AI Confidence
                 </p>
 
-                <p className="mt-1 text-sm font-semibold text-emerald-600">
+                <p className="mt-1 text-sm font-semibold text-[#587F73]">
                   {confidencePercentage}%
                 </p>
 
@@ -315,6 +387,7 @@ const GrievanceDetails = () => {
           </Card>
 
         </div>
+
 
         {/* =================================================
             MAIN CONTENT
@@ -334,11 +407,11 @@ const GrievanceDetails = () => {
 
               <div className="mb-7">
 
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-[#312F2C]">
                   Grievance Status
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Follow the progress of your complaint from
                   submission to resolution.
                 </p>
@@ -353,29 +426,31 @@ const GrievanceDetails = () => {
 
             </Card>
 
+
             {/* ACTIVITY HISTORY */}
 
             <Card>
 
               <div className="flex items-center gap-3 mb-7">
 
-                <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-lg bg-[#EEF1EF] text-[#626A67] flex items-center justify-center">
                   <MessageSquare size={18} />
                 </div>
 
                 <div>
 
-                  <h2 className="text-lg font-semibold text-slate-900">
+                  <h2 className="text-lg font-semibold text-[#312F2C]">
                     Activity History
                   </h2>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-[#7A8580]">
                     Recent updates related to your grievance.
                   </p>
 
                 </div>
 
               </div>
+
 
               <div className="space-y-6">
 
@@ -386,7 +461,7 @@ const GrievanceDetails = () => {
                     className="flex gap-4"
                   >
 
-                    {/* TIMELINE DOT */}
+                    {/* Timeline dot */}
 
                     <div className="flex flex-col items-center">
 
@@ -401,8 +476,8 @@ const GrievanceDetails = () => {
                           shrink-0
                           ${
                             activity.completed
-                              ? "bg-emerald-50 text-emerald-600"
-                              : "bg-blue-50 text-blue-600"
+                              ? "bg-[#E4F0EB] text-[#587F73]"
+                              : "bg-[#EEF1EF] text-[#7A8580]"
                           }
                         `}
                       >
@@ -415,29 +490,31 @@ const GrievanceDetails = () => {
 
                       </div>
 
+
                       {index !== activities.length - 1 && (
-                        <div className="w-px flex-1 bg-slate-200 mt-2 min-h-8" />
+                        <div className="w-px flex-1 bg-[#DDE3E0] mt-2 min-h-8" />
                       )}
 
                     </div>
 
-                    {/* CONTENT */}
+
+                    {/* Content */}
 
                     <div className="pb-1">
 
                       <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
 
-                        <h3 className="text-sm font-semibold text-slate-900">
+                        <h3 className="text-sm font-semibold text-[#312F2C]">
                           {activity.title}
                         </h3>
 
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-[#8A9590]">
                           {activity.time}
                         </span>
 
                       </div>
 
-                      <p className="mt-1 text-sm leading-6 text-slate-500">
+                      <p className="mt-1 text-sm leading-6 text-[#7A8580]">
                         {activity.description}
                       </p>
 
@@ -453,6 +530,7 @@ const GrievanceDetails = () => {
 
           </div>
 
+
           {/* =================================================
               RIGHT COLUMN
           ================================================= */}
@@ -465,17 +543,17 @@ const GrievanceDetails = () => {
 
               <div className="flex items-center gap-3">
 
-                <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-lg bg-[#ABD1C6] text-[#312F2C] flex items-center justify-center">
                   <Sparkles size={18} />
                 </div>
 
                 <div>
 
-                  <h2 className="text-sm font-semibold text-slate-900">
+                  <h2 className="text-sm font-semibold text-[#312F2C]">
                     AI Classification
                   </h2>
 
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-[#7A8580] mt-0.5">
                     Automated grievance analysis
                   </p>
 
@@ -483,35 +561,38 @@ const GrievanceDetails = () => {
 
               </div>
 
+
               <div className="mt-6 space-y-5">
 
                 {/* TOPIC */}
 
                 <div>
 
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#8A9590]">
                     Topic
                   </p>
 
-                  <p className="mt-1 font-medium text-slate-900">
+                  <p className="mt-1 font-medium text-[#312F2C]">
                     {grievance.topic}
                   </p>
 
                 </div>
 
+
                 {/* CATEGORY */}
 
                 <div>
 
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#8A9590]">
                     Category
                   </p>
 
-                  <p className="mt-1 font-medium text-slate-900">
+                  <p className="mt-1 font-medium text-[#312F2C]">
                     {grievance.category}
                   </p>
 
                 </div>
+
 
                 {/* CONFIDENCE */}
 
@@ -519,20 +600,21 @@ const GrievanceDetails = () => {
 
                   <div className="flex items-center justify-between">
 
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-[#8A9590]">
                       Classification Confidence
                     </p>
 
-                    <p className="text-sm font-semibold text-emerald-600">
+                    <p className="text-sm font-semibold text-[#587F73]">
                       {confidencePercentage}%
                     </p>
 
                   </div>
 
-                  <div className="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden">
+
+                  <div className="mt-2 h-2 rounded-full bg-[#EEF1EF] overflow-hidden">
 
                     <div
-                      className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                      className="h-full rounded-full bg-[#587F73] transition-all duration-500"
                       style={{
                         width: `${confidencePercentage}%`,
                       }}
@@ -546,23 +628,24 @@ const GrievanceDetails = () => {
 
             </Card>
 
+
             {/* DEPARTMENT */}
 
             <Card>
 
               <div className="flex items-center gap-3">
 
-                <div className="w-9 h-9 rounded-lg bg-violet-50 text-violet-700 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-lg bg-[#EAF3F0] text-[#587F73] flex items-center justify-center">
                   <Building2 size={18} />
                 </div>
 
                 <div>
 
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#8A9590]">
                     Assigned Department
                   </p>
 
-                  <p className="mt-1 text-lg font-semibold text-slate-900">
+                  <p className="mt-1 text-lg font-semibold text-[#312F2C]">
                     {grievance.department}
                   </p>
 
@@ -570,24 +653,31 @@ const GrievanceDetails = () => {
 
               </div>
 
-              <p className="mt-4 text-sm leading-6 text-slate-500">
+
+              <p className="mt-4 text-sm leading-6 text-[#7A8580]">
                 Your grievance has been routed to the
                 relevant department for handling.
               </p>
 
-              <div className="mt-5 rounded-lg bg-slate-50 border border-slate-100 p-4">
 
-                <p className="text-xs text-slate-400">
+              <div className="mt-5 rounded-lg bg-[#F4F7F5] border border-[#E7ECE9] p-4">
+
+                <p className="text-xs text-[#8A9590]">
                   Current action
                 </p>
 
-                <p className="mt-1 text-sm font-medium text-slate-700">
-                  Officer is reviewing your complaint.
+                <p className="mt-1 text-sm font-medium text-[#626A67]">
+                  {isResolved
+                    ? "Your grievance has been resolved."
+                    : isPending
+                    ? "Your grievance is waiting for officer review."
+                    : "Officer is reviewing your complaint."}
                 </p>
 
               </div>
 
             </Card>
+
 
             {/* EXPECTED RESOLUTION */}
 
@@ -595,27 +685,51 @@ const GrievanceDetails = () => {
 
               <div className="flex items-center gap-3">
 
-                <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
-                  <Clock3 size={18} />
+                <div
+                  className={`
+                    w-9
+                    h-9
+                    rounded-lg
+                    flex
+                    items-center
+                    justify-center
+                    ${
+                      isResolved
+                        ? "bg-[#DCEBE5] text-[#4B6D63]"
+                        : "bg-[#F5EEDF] text-[#8A642F]"
+                    }
+                  `}
+                >
+                  {isResolved ? (
+                    <CheckCircle2 size={18} />
+                  ) : (
+                    <Clock3 size={18} />
+                  )}
                 </div>
 
                 <div>
 
-                  <p className="text-xs text-slate-400">
-                    Expected Resolution
+                  <p className="text-xs text-[#8A9590]">
+                    {isResolved
+                      ? "Resolution Status"
+                      : "Expected Resolution"}
                   </p>
 
-                  <p className="mt-1 text-lg font-semibold text-slate-900">
-                    3–5 working days
+                  <p className="mt-1 text-lg font-semibold text-[#312F2C]">
+                    {isResolved
+                      ? "Resolved"
+                      : "3–5 working days"}
                   </p>
 
                 </div>
 
               </div>
 
-              <p className="mt-3 text-sm leading-6 text-slate-500">
-                The estimated resolution time may change
-                depending on the complexity of the grievance.
+
+              <p className="mt-3 text-sm leading-6 text-[#7A8580]">
+                {isResolved
+                  ? "This grievance has been successfully resolved."
+                  : "The estimated resolution time may change depending on the complexity of the grievance."}
               </p>
 
             </Card>
@@ -623,6 +737,7 @@ const GrievanceDetails = () => {
           </div>
 
         </div>
+
 
         {/* =================================================
             ORIGINAL COMPLAINT
@@ -634,26 +749,31 @@ const GrievanceDetails = () => {
 
             <div>
 
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-[#312F2C]">
                 Your Complaint
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[#7A8580]">
                 Original description submitted by you.
               </p>
 
             </div>
 
-            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-slate-400">
+
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-[#8A9590]">
+
               <CheckCircle2 size={14} />
+
               Submitted
+
             </span>
 
           </div>
 
-          <div className="mt-5 rounded-xl bg-slate-50 border border-slate-100 p-5">
 
-            <p className="text-sm leading-7 text-slate-600">
+          <div className="mt-5 rounded-xl bg-[#F4F7F5] border border-[#E7ECE9] p-5">
+
+            <p className="text-sm leading-7 text-[#626A67]">
               {grievance.description}
             </p>
 
@@ -661,11 +781,12 @@ const GrievanceDetails = () => {
 
         </Card>
 
+
         {/* =================================================
             FOOTER NOTE
         ================================================= */}
 
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-400">
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-[#8A9590] pb-6">
 
           <CheckCircle2 size={14} />
 

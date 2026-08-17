@@ -1,7 +1,18 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // Home
 import Home from "../pages/Home";
+
+// Auth
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
+
+// Protection
+import ProtectedRoute from "./ProtectedRoute";
 
 // Citizen
 import CitizenDashboard from "../pages/citizen/CitizenDashboard";
@@ -17,89 +28,159 @@ import OfficerGrievanceDetails from "../pages/officer/OfficerGrievanceDetails";
 // Admin
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminAnalytics from "../pages/admin/AdminAnalytics";
+import AdminGrievances from "../pages/admin/AdminGrievances";
+import AdminGrievanceDetails from "../pages/admin/AdminGrievanceDetails";
+import Departments from "../pages/admin/Departments";
 
 const AppRoutes = () => {
   return (
     <Routes>
 
-      {/* =========================================
-          PUBLIC
-      ========================================= */}
+      {/* ================= PUBLIC ================= */}
 
       <Route
         path="/"
         element={<Home />}
       />
 
+      <Route
+        path="/login"
+        element={<Login />}
+      />
 
-      {/* =========================================
-          CITIZEN
-      ========================================= */}
+      <Route
+        path="/register"
+        element={<Register />}
+      />
+
+
+      {/* ================= CITIZEN ================= */}
 
       <Route
         path="/citizen/dashboard"
-        element={<CitizenDashboard />}
+        element={
+          <ProtectedRoute allowedRoles={["citizen"]}>
+            <CitizenDashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/citizen/submit"
-        element={<SubmitGrievance />}
+        element={
+          <ProtectedRoute allowedRoles={["citizen"]}>
+            <SubmitGrievance />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/citizen/grievances"
-        element={<MyGrievances />}
+        element={
+          <ProtectedRoute allowedRoles={["citizen"]}>
+            <MyGrievances />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/citizen/grievances/:id"
-        element={<GrievanceDetails />}
+        element={
+          <ProtectedRoute allowedRoles={["citizen"]}>
+            <GrievanceDetails />
+          </ProtectedRoute>
+        }
       />
 
 
-      {/* =========================================
-          OFFICER
-      ========================================= */}
+      {/* ================= OFFICER ================= */}
 
       <Route
         path="/officer/dashboard"
-        element={<OfficerDashboard />}
+        element={
+          <ProtectedRoute allowedRoles={["officer"]}>
+            <OfficerDashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/officer/grievances"
-        element={<AssignedGrievances />}
+        element={
+          <ProtectedRoute allowedRoles={["officer"]}>
+            <AssignedGrievances />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/officer/priority"
-        element={<AssignedGrievances priorityOnly />}
+        element={
+          <ProtectedRoute allowedRoles={["officer"]}>
+            <AssignedGrievances priorityOnly />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/officer/grievances/:id"
-        element={<OfficerGrievanceDetails />}
+        element={
+          <ProtectedRoute allowedRoles={["officer"]}>
+            <OfficerGrievanceDetails />
+          </ProtectedRoute>
+        }
       />
 
 
-      {/* =========================================
-          ADMIN
-      ========================================= */}
+      {/* ================= ADMIN ================= */}
 
       <Route
         path="/admin/dashboard"
-        element={<AdminDashboard />}
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/admin/analytics"
-        element={<AdminAnalytics />}
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminAnalytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/grievances"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminGrievances />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/grievances/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminGrievanceDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/departments"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <Departments />
+          </ProtectedRoute>
+        }
       />
 
 
-      {/* =========================================
-          FALLBACK
-      ========================================= */}
+      {/* ================= FALLBACK ================= */}
 
       <Route
         path="*"

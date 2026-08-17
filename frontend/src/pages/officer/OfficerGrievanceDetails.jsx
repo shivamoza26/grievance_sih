@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
 import {
   ArrowLeft,
   Sparkles,
@@ -20,43 +21,27 @@ const OfficerGrievanceDetails = () => {
   const { id } = useParams();
 
   const grievance = officerGrievances.find(
-    (item) => item.id === id
+    (item) =>
+      String(item.id).trim() === String(id).trim()
   );
-  if (!grievance) {
-  return (
-    <DashboardLayout
-      role="officer"
-      userName="Officer"
-    >
-      <div className="max-w-3xl mx-auto text-center py-20">
 
-        <h1 className="text-2xl font-bold text-slate-900">
-          Grievance not found
-        </h1>
-
-        <p className="mt-2 text-slate-500">
-          The grievance you're looking for does not exist.
-        </p>
-
-        <Link
-          to="/officer/grievances"
-          className="inline-flex mt-6 items-center justify-center rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800 transition"
-        >
-          Back to Assigned Grievances
-        </Link>
-
-      </div>
-    </DashboardLayout>
-  );
-}
+  // =====================================================
+  // STATE
+  // =====================================================
 
   const [status, setStatus] = useState(
-    grievance.status
+    grievance?.status || "PENDING"
   );
 
   const [reply, setReply] = useState("");
 
   const [updated, setUpdated] = useState(false);
+
+  const [replySent, setReplySent] = useState(false);
+
+  // =====================================================
+  // STATUS UPDATE
+  // =====================================================
 
   const handleUpdate = () => {
     setUpdated(true);
@@ -66,6 +51,10 @@ const OfficerGrievanceDetails = () => {
     }, 2500);
   };
 
+  // =====================================================
+  // REPLY
+  // =====================================================
+
   const handleReply = (event) => {
     event.preventDefault();
 
@@ -74,7 +63,96 @@ const OfficerGrievanceDetails = () => {
     }
 
     setReply("");
+
+    setReplySent(true);
+
+    setTimeout(() => {
+      setReplySent(false);
+    }, 2500);
   };
+
+  // =====================================================
+  // GRIEVANCE NOT FOUND
+  // =====================================================
+
+  if (!grievance) {
+    return (
+      <DashboardLayout
+        role="officer"
+        userName="Officer"
+      >
+        <div className="max-w-3xl mx-auto text-center py-20">
+
+          <div
+            className="
+              mx-auto
+              w-14
+              h-14
+              rounded-full
+              bg-[#EEF1EF]
+              text-[#7A8580]
+              flex
+              items-center
+              justify-center
+            "
+          >
+            <CheckCircle2 size={24} />
+          </div>
+
+          <h1 className="mt-5 text-2xl font-bold text-[#312F2C]">
+            Grievance not found
+          </h1>
+
+          <p className="mt-2 text-[#7A8580]">
+            The grievance you're looking for does not exist.
+          </p>
+
+          <Link
+            to="/officer/grievances"
+            className="
+              inline-flex
+              items-center
+              justify-center
+              gap-2
+              mt-6
+              rounded-lg
+              bg-[#312F2C]
+              px-5
+              py-3
+              text-sm
+              font-medium
+              !text-white
+              hover:bg-[#211F1D]
+              transition
+            "
+          >
+            <ArrowLeft size={16} />
+
+            <span className="!text-white">
+              Back to Assigned Grievances
+            </span>
+          </Link>
+
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  // =====================================================
+  // DERIVED DATA
+  // =====================================================
+
+  const confidence = Math.round(
+    grievance.confidence * 100
+  );
+
+  const isResolved = status === "RESOLVED";
+
+  const isRejected = status === "REJECTED";
+
+  // =====================================================
+  // PAGE
+  // =====================================================
 
   return (
     <DashboardLayout
@@ -83,25 +161,49 @@ const OfficerGrievanceDetails = () => {
     >
       <div className="max-w-7xl mx-auto">
 
-        {/* Back */}
+        {/* =================================================
+            BACK
+        ================================================= */}
+
         <Link
           to="/officer/grievances"
-          className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 transition"
+          className="
+            inline-flex
+            items-center
+            justify-center
+            gap-2
+            rounded-lg
+            bg-[#312F2C]
+            px-5
+            py-3
+            text-sm
+            font-medium
+            !text-white
+            hover:bg-[#211F1D]
+            transition
+          "
         >
           <ArrowLeft size={16} />
-          Back to Assigned Grievances
+
+          <span className="!text-white">
+            Back to Assigned Grievances
+          </span>
         </Link>
 
-        {/* Header */}
+
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
         <div className="mt-6">
 
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
 
-            <div>
+            <div className="min-w-0">
 
               <div className="flex items-center gap-3 flex-wrap">
 
-                <span className="text-sm font-semibold text-slate-400">
+                <span className="text-sm font-semibold text-[#8A9590]">
                   {grievance.id}
                 </span>
 
@@ -115,21 +217,37 @@ const OfficerGrievanceDetails = () => {
 
               </div>
 
-              <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+
+              <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#312F2C]">
                 {grievance.title}
               </h1>
 
-              <div className="mt-3 flex flex-wrap items-center gap-5 text-sm text-slate-500">
+
+              <div className="mt-3 flex flex-wrap items-center gap-5 text-sm text-[#7A8580]">
 
                 <span className="inline-flex items-center gap-2">
-                  <User size={16} />
+
+                  <User
+                    size={16}
+                    className="text-[#587F73]"
+                  />
+
                   {grievance.citizen}
+
                 </span>
 
+
                 <span className="inline-flex items-center gap-2">
-                  <MapPin size={16} />
+
+                  <MapPin
+                    size={16}
+                    className="text-[#587F73]"
+                  />
+
                   {grievance.location}
+
                 </span>
+
 
                 <span>
                   Submitted {grievance.submittedAt}
@@ -139,57 +257,99 @@ const OfficerGrievanceDetails = () => {
 
             </div>
 
-            {/* Confidence */}
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50">
 
-              <div className="w-9 h-9 rounded-lg bg-white text-emerald-600 flex items-center justify-center">
+            {/* AI CONFIDENCE */}
+
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                px-4
+                py-3
+                rounded-xl
+                border
+                border-[#C4DED4]
+                bg-[#F0F6F3]
+              "
+            >
+
+              <div
+                className="
+                  w-9
+                  h-9
+                  rounded-lg
+                  bg-white
+                  text-[#587F73]
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
                 <Sparkles size={18} />
               </div>
 
               <div>
-                <p className="text-xs text-emerald-700">
+
+                <p className="text-xs text-[#587F73]">
                   AI Confidence
                 </p>
 
-                <p className="text-lg font-bold text-emerald-700">
-                  {Math.round(
-                    grievance.confidence * 100
-                  )}
-                  %
+                <p className="text-lg font-bold text-[#4B6D63]">
+                  {confidence}%
                 </p>
+
               </div>
 
             </div>
 
           </div>
+
         </div>
 
-        {/* Main grid */}
+
+        {/* =================================================
+            MAIN GRID
+        ================================================= */}
+
         <div className="grid xl:grid-cols-[1.15fr_0.85fr] gap-6 mt-8">
 
-          {/* LEFT */}
+
+          {/* =================================================
+              LEFT COLUMN
+          ================================================= */}
+
           <div className="space-y-6">
 
-            {/* Citizen complaint */}
+            {/* CITIZEN COMPLAINT */}
+
             <Card>
 
-              <div className="flex items-center justify-between">
+              <div>
 
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    Citizen Complaint
-                  </h2>
+                <h2 className="text-lg font-semibold text-[#312F2C]">
+                  Citizen Complaint
+                </h2>
 
-                  <p className="mt-1 text-sm text-slate-500">
-                    Original grievance submitted by the citizen.
-                  </p>
-                </div>
+                <p className="mt-1 text-sm text-[#7A8580]">
+                  Original grievance submitted by the citizen.
+                </p>
 
               </div>
 
-              <div className="mt-5 p-4 rounded-lg bg-slate-50 border border-slate-100">
 
-                <p className="text-sm leading-7 text-slate-700">
+              <div
+                className="
+                  mt-5
+                  p-4
+                  rounded-lg
+                  bg-[#F4F7F5]
+                  border
+                  border-[#E7ECE9]
+                "
+              >
+
+                <p className="text-sm leading-7 text-[#626A67]">
                   {grievance.description}
                 </p>
 
@@ -197,30 +357,46 @@ const OfficerGrievanceDetails = () => {
 
             </Card>
 
-            {/* AI Summary */}
+
+            {/* AI SUMMARY */}
+
             <Card>
 
               <div className="flex items-center gap-3">
 
-                <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+                <div
+                  className="
+                    w-9
+                    h-9
+                    rounded-lg
+                    bg-[#ABD1C6]
+                    text-[#312F2C]
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
                   <Sparkles size={18} />
                 </div>
 
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-900">
+
+                  <h2 className="text-lg font-semibold text-[#312F2C]">
                     AI Summary
                   </h2>
 
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-[#7A8580]">
                     A concise summary generated from the grievance.
                   </p>
+
                 </div>
 
               </div>
 
+
               <div className="mt-5">
 
-                <p className="text-sm leading-7 text-slate-600">
+                <p className="text-sm leading-7 text-[#626A67]">
                   {grievance.aiSummary}
                 </p>
 
@@ -228,23 +404,38 @@ const OfficerGrievanceDetails = () => {
 
             </Card>
 
-            {/* Recommended action */}
+
+            {/* RECOMMENDED ACTION */}
+
             <Card>
 
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-[#312F2C]">
                 Recommended Action
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
-                Suggested next step based on the grievance classification.
+              <p className="mt-1 text-sm text-[#7A8580]">
+                Suggested next step based on the grievance
+                classification.
               </p>
 
-              <div className="mt-5 p-4 rounded-lg border border-blue-100 bg-blue-50">
 
-                <p className="text-sm leading-6 text-blue-900">
-                  Verify the reported issue with the concerned
-                  department and initiate the appropriate resolution
-                  process.
+              <div
+                className="
+                  mt-5
+                  p-4
+                  rounded-lg
+                  border
+                  border-[#C4DED4]
+                  bg-[#F0F6F3]
+                "
+              >
+
+                <p className="text-sm leading-6 text-[#4B6D63]">
+                  {isResolved
+                    ? "The grievance has been resolved successfully."
+                    : isRejected
+                    ? "Review the grievance and provide an appropriate reason for rejection."
+                    : "Verify the reported issue with the concerned department and initiate the appropriate resolution process."}
                 </p>
 
               </div>
@@ -253,67 +444,111 @@ const OfficerGrievanceDetails = () => {
 
           </div>
 
-          {/* RIGHT */}
+
+          {/* =================================================
+              RIGHT COLUMN
+          ================================================= */}
+
           <div className="space-y-6">
 
-            {/* AI Classification */}
+            {/* AI CLASSIFICATION */}
+
             <Card>
 
-              <h2 className="text-lg font-semibold text-slate-900">
-                AI Classification
-              </h2>
+              <div className="flex items-center gap-3">
 
-              <p className="mt-1 text-sm text-slate-500">
-                Automated analysis of this grievance.
-              </p>
+                <div
+                  className="
+                    w-9
+                    h-9
+                    rounded-lg
+                    bg-[#E4F0EB]
+                    text-[#587F73]
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <Sparkles size={18} />
+                </div>
+
+
+                <div>
+
+                  <h2 className="text-lg font-semibold text-[#312F2C]">
+                    AI Classification
+                  </h2>
+
+                  <p className="mt-1 text-sm text-[#7A8580]">
+                    Automated analysis of this grievance.
+                  </p>
+
+                </div>
+
+              </div>
+
 
               <div className="mt-6 space-y-5">
 
+                {/* TOPIC */}
+
                 <div>
-                  <p className="text-xs text-slate-400">
+
+                  <p className="text-xs text-[#8A9590]">
                     Topic
                   </p>
 
-                  <p className="mt-1 font-semibold text-slate-900">
+                  <p className="mt-1 font-semibold text-[#312F2C]">
                     {grievance.topic}
                   </p>
+
                 </div>
 
+
+                {/* CATEGORY */}
+
                 <div>
-                  <p className="text-xs text-slate-400">
+
+                  <p className="text-xs text-[#8A9590]">
                     Category
                   </p>
 
-                  <p className="mt-1 font-semibold text-slate-900">
+                  <p className="mt-1 font-semibold text-[#312F2C]">
                     {grievance.category}
                   </p>
+
                 </div>
+
+
+                {/* CONFIDENCE */}
 
                 <div>
 
                   <div className="flex items-center justify-between">
 
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-[#8A9590]">
                       Classification Confidence
                     </p>
 
-                    <p className="text-sm font-semibold text-emerald-600">
-                      {Math.round(
-                        grievance.confidence * 100
-                      )}
-                      %
+                    <p className="text-sm font-semibold text-[#587F73]">
+                      {confidence}%
                     </p>
 
                   </div>
 
-                  <div className="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden">
+
+                  <div className="mt-2 h-2 rounded-full bg-[#EEF1EF] overflow-hidden">
 
                     <div
-                      className="h-full rounded-full bg-emerald-500"
+                      className="
+                        h-full
+                        rounded-full
+                        bg-[#587F73]
+                        transition-all
+                        duration-500
+                      "
                       style={{
-                        width: `${
-                          grievance.confidence * 100
-                        }%`,
+                        width: `${confidence}%`,
                       }}
                     />
 
@@ -325,41 +560,63 @@ const OfficerGrievanceDetails = () => {
 
             </Card>
 
-            {/* Department */}
+
+            {/* DEPARTMENT */}
+
             <Card>
 
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#8A9590]">
                 Assigned Department
               </p>
 
-              <p className="mt-1 text-xl font-semibold text-slate-900">
+              <p className="mt-1 text-xl font-semibold text-[#312F2C]">
                 {grievance.department}
               </p>
 
-              <p className="mt-2 text-sm text-slate-500">
-                This grievance was routed based on the AI classification.
+              <p className="mt-2 text-sm text-[#7A8580]">
+                This grievance was routed based on the AI
+                classification.
               </p>
 
             </Card>
 
-            {/* Status update */}
+
+            {/* STATUS UPDATE */}
+
             <Card>
 
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-[#312F2C]">
                 Update Status
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[#7A8580]">
                 Update the current state of this grievance.
               </p>
+
 
               <select
                 value={status}
                 onChange={(event) =>
                   setStatus(event.target.value)
                 }
-                className="mt-5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="
+                  mt-5
+                  w-full
+                  rounded-lg
+                  border
+                  border-[#C8D2CE]
+                  bg-white
+                  px-3
+                  py-2.5
+                  text-sm
+                  text-[#626A67]
+                  outline-none
+                  focus:border-[#587F73]
+                  focus:ring-2
+                  focus:ring-[#ABD1C6]/50
+                "
               >
+
                 <option value="PENDING">
                   Pending
                 </option>
@@ -375,20 +632,54 @@ const OfficerGrievanceDetails = () => {
                 <option value="REJECTED">
                   Rejected
                 </option>
+
               </select>
 
+
               <button
+                type="button"
                 onClick={handleUpdate}
-                className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800 transition"
+                className="
+                  mt-3
+                  w-full
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-lg
+                  bg-[#587F73]
+                  px-4
+                  py-2.5
+                  text-sm
+                  font-semibold
+                  !text-white
+                  hover:bg-[#4B6D63]
+                  transition
+                "
               >
-                <CheckCircle2 size={17} />
-                Save Status
+
+                <CheckCircle2
+                  size={17}
+                  className="!text-white"
+                />
+
+                <span className="!text-white">
+                  Save Status
+                </span>
+
               </button>
 
+
               {updated && (
-                <p className="mt-3 text-sm text-emerald-600 text-center">
+
+                <div className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#E4F0EB] border border-[#C4DED4] px-3 py-2.5 text-sm font-medium text-[#4B6D63]">
+
+                  <CheckCircle2 size={15} />
+
                   Status updated successfully.
-                </p>
+
+                </div>
+
               )}
 
             </Card>
@@ -397,26 +688,45 @@ const OfficerGrievanceDetails = () => {
 
         </div>
 
-        {/* Reply */}
+
+        {/* =================================================
+            REPLY TO CITIZEN
+        ================================================= */}
+
         <Card className="mt-6">
 
           <div className="flex items-center gap-3">
 
-            <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">
+            <div
+              className="
+                w-9
+                h-9
+                rounded-lg
+                bg-[#EEF1EF]
+                text-[#626A67]
+                flex
+                items-center
+                justify-center
+              "
+            >
               <Send size={17} />
             </div>
 
+
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">
+
+              <h2 className="text-lg font-semibold text-[#312F2C]">
                 Reply to Citizen
               </h2>
 
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-[#7A8580]">
                 Send an update or request additional information.
               </p>
+
             </div>
 
           </div>
+
 
           <form
             onSubmit={handleReply}
@@ -430,18 +740,73 @@ const OfficerGrievanceDetails = () => {
               }
               rows={5}
               placeholder="Write a clear response to the citizen..."
-              className="w-full resize-none rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="
+                w-full
+                resize-none
+                rounded-lg
+                border
+                border-[#C8D2CE]
+                bg-white
+                px-4
+                py-3
+                text-sm
+                text-[#312F2C]
+                placeholder:text-[#9AA39F]
+                outline-none
+                transition
+                focus:border-[#587F73]
+                focus:ring-2
+                focus:ring-[#ABD1C6]/50
+              "
             />
 
-            <div className="mt-3 flex justify-end">
+
+            <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+              {replySent ? (
+                <div className="flex items-center gap-2 text-sm font-medium text-[#4B6D63]">
+
+                  <CheckCircle2 size={16} />
+
+                  Reply sent successfully.
+
+                </div>
+              ) : (
+                <div />
+              )}
+
 
               <button
                 type="submit"
                 disabled={!reply.trim()}
-                className="inline-flex items-center gap-2 rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-lg
+                  bg-[#587F73]
+                  px-4
+                  py-2.5
+                  text-sm
+                  font-semibold
+                  !text-white
+                  hover:bg-[#4B6D63]
+                  transition
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                "
               >
-                <Send size={16} />
-                Send Reply
+
+                <Send
+                  size={16}
+                  className="!text-white"
+                />
+
+                <span className="!text-white">
+                  Send Reply
+                </span>
+
               </button>
 
             </div>
@@ -449,6 +814,16 @@ const OfficerGrievanceDetails = () => {
           </form>
 
         </Card>
+
+
+        {/* =================================================
+            FOOTER NOTE
+        ================================================= */}
+
+        <div className="mt-6 text-center text-xs text-[#8A9590] pb-6">
+          Changes made to grievance status are recorded for
+          administrative review.
+        </div>
 
       </div>
     </DashboardLayout>

@@ -31,8 +31,10 @@ const StatusBadge = ({ status }) => {
     },
   };
 
+  const normalizedStatus = status?.toUpperCase();
+
   const config =
-    styles[status] || {
+    styles[normalizedStatus] || {
       label: status || "Unknown",
       className:
         "bg-[#EEF1EF] text-[#626A67] border-[#D9DEDB]",

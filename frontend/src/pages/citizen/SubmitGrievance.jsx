@@ -165,43 +165,46 @@ const SubmitGrievance = () => {
         <div className="max-w-4xl mx-auto">
 
           {/* SUCCESS HEADER */}
+
           <div className="text-center mb-8">
 
-            <div className="mx-auto w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="mx-auto w-14 h-14 rounded-full bg-[#E4F0EB] text-[#587F73] flex items-center justify-center">
               <CheckCircle2 size={30} />
             </div>
 
-            <h1 className="mt-4 text-3xl font-bold text-slate-900">
+            <h1 className="mt-4 text-3xl font-bold text-[#312F2C]">
               Grievance submitted successfully
             </h1>
 
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-[#626A67]">
               Your complaint has been analyzed and routed
               to the appropriate department.
             </p>
 
           </div>
 
+
           {/* GRIEVANCE SUMMARY */}
+
           <Card>
 
-            <div className="flex items-center justify-between gap-4 pb-5 border-b border-slate-100">
+            <div className="flex items-center justify-between gap-4 pb-5 border-b border-[#E7ECE9]">
 
               <div>
 
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                <p className="text-xs font-semibold text-[#8A9590] uppercase tracking-wide">
                   Grievance ID
                 </p>
 
-                <p className="mt-1 text-xl font-bold text-slate-900">
+                <p className="mt-1 text-xl font-bold text-[#312F2C]">
                   GRV-1049
                 </p>
 
               </div>
 
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E4F0EB] text-[#587F73] text-sm font-medium">
 
-                <span className="w-2 h-2 rounded-full bg-blue-600" />
+                <span className="w-2 h-2 rounded-full bg-[#587F73]" />
 
                 Assigned
 
@@ -209,40 +212,44 @@ const SubmitGrievance = () => {
 
             </div>
 
+
             {/* BASIC INFORMATION */}
-            <div className="grid sm:grid-cols-3 gap-6 py-6 border-b border-slate-100">
+
+            <div className="grid sm:grid-cols-3 gap-6 py-6 border-b border-[#E7ECE9]">
 
               <div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   Topic
                 </p>
 
-                <p className="mt-1 font-semibold text-slate-900">
+                <p className="mt-1 font-semibold text-[#312F2C]">
                   {aiResult.topic}
                 </p>
 
               </div>
 
+
               <div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   Category
                 </p>
 
-                <p className="mt-1 font-semibold text-slate-900">
+                <p className="mt-1 font-semibold text-[#312F2C]">
                   {aiResult.category}
                 </p>
 
               </div>
 
+
               <div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   AI Confidence
                 </p>
 
-                <p className="mt-1 font-semibold text-emerald-600">
+                <p className="mt-1 font-semibold text-[#587F73]">
                   {Math.round(
                     aiResult.confidence * 100
                   )}
@@ -253,45 +260,51 @@ const SubmitGrievance = () => {
 
             </div>
 
+
             {/* AI CLASSIFICATION */}
+
             <div className="pt-6">
 
               <div className="flex items-center gap-2">
 
                 <Sparkles
                   size={17}
-                  className="text-blue-600"
+                  className="text-[#587F73]"
                 />
 
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-semibold text-[#312F2C]">
                   AI Classification
                 </p>
 
               </div>
 
+
               <div className="grid sm:grid-cols-2 gap-5 mt-5">
 
                 {/* DEPARTMENT */}
+
                 <div>
 
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#8A9590]">
                     Recommended Department
                   </p>
 
-                  <p className="mt-1 font-semibold text-slate-900">
+                  <p className="mt-1 font-semibold text-[#312F2C]">
                     {aiResult.department}
                   </p>
 
                 </div>
 
+
                 {/* PRIORITY */}
+
                 <div>
 
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#8A9590]">
                     Priority
                   </p>
 
-                  <p className="mt-1 font-semibold text-slate-900">
+                  <p className="mt-1 font-semibold text-[#312F2C]">
                     {aiResult.priority}
                   </p>
 
@@ -303,12 +316,14 @@ const SubmitGrievance = () => {
 
           </Card>
 
+
           {/* TRACK GRIEVANCE */}
+
           <div className="mt-6 flex justify-end">
 
             <Link
               to="/citizen/grievances/GRV-1049"
-              className="inline-flex items-center gap-2 text-sm font-medium text-blue-700 hover:text-blue-800 transition"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#587F73] hover:text-[#312F2C] transition"
             >
               Track this grievance
 
@@ -323,6 +338,7 @@ const SubmitGrievance = () => {
     );
   }
 
+
   // --------------------------------------------------
   // SUBMISSION FORM
   // --------------------------------------------------
@@ -335,23 +351,25 @@ const SubmitGrievance = () => {
       <div className="max-w-5xl mx-auto">
 
         {/* PAGE HEADER */}
+
         <div className="mb-8">
 
-          <p className="text-sm font-medium text-blue-700">
+          <p className="text-sm font-medium text-[#587F73]">
             Citizen Portal
           </p>
 
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#312F2C]">
             Submit a Grievance
           </h1>
 
-          <p className="mt-2 text-slate-500 max-w-2xl">
+          <p className="mt-2 text-[#626A67] max-w-2xl">
             Describe your issue clearly. Our system will
             analyze your grievance and route it to the
             appropriate department.
           </p>
 
         </div>
+
 
         <form onSubmit={handleSubmit}>
 
@@ -369,11 +387,11 @@ const SubmitGrievance = () => {
 
               <div>
 
-                <label className="block text-sm font-semibold text-slate-900">
+                <label className="block text-sm font-semibold text-[#312F2C]">
                   Complaint title
                 </label>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Give your grievance a short, clear title.
                 </p>
 
@@ -385,14 +403,32 @@ const SubmitGrievance = () => {
                   }
                   placeholder="Example: Scholarship payment not received"
                   maxLength={120}
-                  className="mt-4 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="
+                    mt-4
+                    w-full
+                    rounded-lg
+                    border
+                    border-[#C8D2CE]
+                    bg-white
+                    px-4
+                    py-3
+                    text-sm
+                    text-[#312F2C]
+                    placeholder:text-[#9AA39F]
+                    outline-none
+                    transition
+                    focus:border-[#587F73]
+                    focus:ring-2
+                    focus:ring-[#ABD1C6]/50
+                  "
                 />
 
-                <div className="mt-2 text-right text-xs text-slate-400">
+                <div className="mt-2 text-right text-xs text-[#8A9590]">
                   {title.length}/120
                 </div>
 
               </div>
+
 
               {/* -----------------------------------------
                   DESCRIPTION
@@ -400,11 +436,11 @@ const SubmitGrievance = () => {
 
               <div className="mt-6">
 
-                <label className="block text-sm font-semibold text-slate-900">
+                <label className="block text-sm font-semibold text-[#312F2C]">
                   Describe your issue
                 </label>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Include what happened, when it happened
                   and where.
                 </p>
@@ -421,10 +457,28 @@ const SubmitGrievance = () => {
                   }
                   placeholder="Example: My scholarship payment has not been received even though my application was approved..."
                   rows={8}
-                  className="mt-4 w-full resize-none rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="
+                    mt-4
+                    w-full
+                    resize-none
+                    rounded-lg
+                    border
+                    border-[#C8D2CE]
+                    bg-white
+                    px-4
+                    py-3
+                    text-sm
+                    text-[#312F2C]
+                    placeholder:text-[#9AA39F]
+                    outline-none
+                    transition
+                    focus:border-[#587F73]
+                    focus:ring-2
+                    focus:ring-[#ABD1C6]/50
+                  "
                 />
 
-                <div className="mt-2 flex justify-between text-xs text-slate-400">
+                <div className="mt-2 flex justify-between text-xs text-[#8A9590]">
 
                   <span>
                     Be as specific as possible.
@@ -438,6 +492,7 @@ const SubmitGrievance = () => {
 
               </div>
 
+
               {/* -----------------------------------------
                   LOCATION
               ----------------------------------------- */}
@@ -448,25 +503,27 @@ const SubmitGrievance = () => {
 
                   <MapPin
                     size={18}
-                    className="text-blue-700"
+                    className="text-[#587F73]"
                   />
 
-                  <h2 className="text-sm font-semibold text-slate-900">
+                  <h2 className="text-sm font-semibold text-[#312F2C]">
                     Location
                   </h2>
 
                 </div>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Where did this issue occur?
                 </p>
+
 
                 <div className="grid sm:grid-cols-2 gap-4 mt-4">
 
                   {/* STATE */}
+
                   <div>
 
-                    <label className="block text-xs font-medium text-slate-600 mb-1.5">
+                    <label className="block text-xs font-medium text-[#626A67] mb-1.5">
                       State
                     </label>
 
@@ -475,7 +532,21 @@ const SubmitGrievance = () => {
                       onChange={(event) =>
                         setState(event.target.value)
                       }
-                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-[#C8D2CE]
+                        bg-white
+                        px-3
+                        py-2.5
+                        text-sm
+                        text-[#312F2C]
+                        outline-none
+                        focus:border-[#587F73]
+                        focus:ring-2
+                        focus:ring-[#ABD1C6]/50
+                      "
                     >
 
                       <option value="">
@@ -498,10 +569,12 @@ const SubmitGrievance = () => {
 
                   </div>
 
+
                   {/* DISTRICT */}
+
                   <div>
 
-                    <label className="block text-xs font-medium text-slate-600 mb-1.5">
+                    <label className="block text-xs font-medium text-[#626A67] mb-1.5">
                       District
                     </label>
 
@@ -510,7 +583,21 @@ const SubmitGrievance = () => {
                       onChange={(event) =>
                         setDistrict(event.target.value)
                       }
-                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="
+                        w-full
+                        rounded-lg
+                        border
+                        border-[#C8D2CE]
+                        bg-white
+                        px-3
+                        py-2.5
+                        text-sm
+                        text-[#312F2C]
+                        outline-none
+                        focus:border-[#587F73]
+                        focus:ring-2
+                        focus:ring-[#ABD1C6]/50
+                      "
                     >
 
                       <option value="">
@@ -537,17 +624,18 @@ const SubmitGrievance = () => {
 
               </div>
 
+
               {/* -----------------------------------------
                   CATEGORY
               ----------------------------------------- */}
 
               <div className="mt-8">
 
-                <label className="block text-sm font-semibold text-slate-900">
+                <label className="block text-sm font-semibold text-[#312F2C]">
                   Category
                 </label>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Select a category or let the AI system
                   recommend one.
                 </p>
@@ -557,7 +645,22 @@ const SubmitGrievance = () => {
                   onChange={(event) =>
                     setCategory(event.target.value)
                   }
-                  className="mt-4 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="
+                    mt-4
+                    w-full
+                    rounded-lg
+                    border
+                    border-[#C8D2CE]
+                    bg-white
+                    px-3
+                    py-2.5
+                    text-sm
+                    text-[#312F2C]
+                    outline-none
+                    focus:border-[#587F73]
+                    focus:ring-2
+                    focus:ring-[#ABD1C6]/50
+                  "
                 >
 
                   <option value="">
@@ -592,17 +695,18 @@ const SubmitGrievance = () => {
 
               </div>
 
+
               {/* -----------------------------------------
                   EVIDENCE UPLOAD
               ----------------------------------------- */}
 
               <div className="mt-8">
 
-                <label className="block text-sm font-semibold text-slate-900">
+                <label className="block text-sm font-semibold text-[#312F2C]">
                   Supporting evidence
                 </label>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Upload an image or PDF if it helps explain
                   the issue.
                 </p>
@@ -615,38 +719,46 @@ const SubmitGrievance = () => {
 
               </div>
 
+
               {/* -----------------------------------------
                   AI PREVIEW
               ----------------------------------------- */}
 
               {description.trim().length >= 20 && (
-                <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50/50 p-5">
+
+                <div className="mt-8 rounded-xl border border-[#C4DED4] bg-[#F0F6F3] p-5">
 
                   <div className="flex items-start gap-3">
 
                     {/* AI ICON */}
-                    <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+
+                    <div className="w-9 h-9 rounded-lg bg-[#ABD1C6] text-[#312F2C] flex items-center justify-center shrink-0">
+
                       <Sparkles size={18} />
+
                     </div>
+
 
                     <div className="flex-1">
 
                       {/* AI HEADER */}
+
                       <div className="flex items-center justify-between gap-3">
 
                         <div>
 
-                          <h3 className="text-sm font-semibold text-slate-900">
+                          <h3 className="text-sm font-semibold text-[#312F2C]">
                             AI classification preview
                           </h3>
 
-                          <p className="mt-1 text-xs text-slate-500">
+                          <p className="mt-1 text-xs text-[#7A8580]">
                             Preliminary analysis based on your complaint.
                           </p>
 
                         </div>
 
-                        <span className="hidden sm:inline-flex items-center gap-1 text-xs font-medium text-blue-700">
+
+                        <span className="hidden sm:inline-flex items-center gap-1 text-xs font-medium text-[#587F73]">
 
                           <ShieldCheck size={14} />
 
@@ -656,12 +768,14 @@ const SubmitGrievance = () => {
 
                       </div>
 
+
                       {/* ANALYZING */}
+
                       {isPreviewingAI ? (
 
-                        <div className="mt-5 flex items-center gap-3 text-sm text-slate-500">
+                        <div className="mt-5 flex items-center gap-3 text-sm text-[#7A8580]">
 
-                          <span className="w-4 h-4 rounded-full border-2 border-blue-200 border-t-blue-600 animate-spin" />
+                          <span className="w-4 h-4 rounded-full border-2 border-[#C4DED4] border-t-[#587F73] animate-spin" />
 
                           Analyzing complaint...
 
@@ -672,55 +786,63 @@ const SubmitGrievance = () => {
                         <div className="mt-5">
 
                           {/* RESULTS */}
+
                           <div className="grid sm:grid-cols-2 gap-5">
 
                             {/* TOPIC */}
+
                             <div>
 
-                              <p className="text-xs text-slate-400">
+                              <p className="text-xs text-[#8A9590]">
                                 Topic
                               </p>
 
-                              <p className="mt-1 text-sm font-semibold text-slate-900">
+                              <p className="mt-1 text-sm font-semibold text-[#312F2C]">
                                 {aiResult.topic}
                               </p>
 
                             </div>
 
+
                             {/* CATEGORY */}
+
                             <div>
 
-                              <p className="text-xs text-slate-400">
+                              <p className="text-xs text-[#8A9590]">
                                 Category
                               </p>
 
-                              <p className="mt-1 text-sm font-semibold text-slate-900">
+                              <p className="mt-1 text-sm font-semibold text-[#312F2C]">
                                 {aiResult.category}
                               </p>
 
                             </div>
 
+
                             {/* DEPARTMENT */}
+
                             <div>
 
-                              <p className="text-xs text-slate-400">
+                              <p className="text-xs text-[#8A9590]">
                                 Department
                               </p>
 
-                              <p className="mt-1 text-sm font-semibold text-slate-900">
+                              <p className="mt-1 text-sm font-semibold text-[#312F2C]">
                                 {aiResult.department}
                               </p>
 
                             </div>
 
+
                             {/* PRIORITY */}
+
                             <div>
 
-                              <p className="text-xs text-slate-400">
+                              <p className="text-xs text-[#8A9590]">
                                 Priority
                               </p>
 
-                              <p className="mt-1 text-sm font-semibold text-slate-900">
+                              <p className="mt-1 text-sm font-semibold text-[#312F2C]">
                                 {aiResult.priority}
                               </p>
 
@@ -728,16 +850,18 @@ const SubmitGrievance = () => {
 
                           </div>
 
+
                           {/* CONFIDENCE */}
+
                           <div className="mt-5">
 
                             <div className="flex items-center justify-between">
 
-                              <p className="text-xs text-slate-400">
+                              <p className="text-xs text-[#8A9590]">
                                 Confidence
                               </p>
 
-                              <p className="text-xs font-semibold text-emerald-600">
+                              <p className="text-xs font-semibold text-[#587F73]">
                                 {Math.round(
                                   aiResult.confidence * 100
                                 )}
@@ -746,10 +870,11 @@ const SubmitGrievance = () => {
 
                             </div>
 
+
                             <div className="mt-2 h-2 rounded-full bg-white overflow-hidden">
 
                               <div
-                                className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                                className="h-full rounded-full bg-[#587F73] transition-all duration-500"
                                 style={{
                                   width: `${
                                     aiResult.confidence *
@@ -771,15 +896,17 @@ const SubmitGrievance = () => {
                   </div>
 
                 </div>
+
               )}
+
 
               {/* -----------------------------------------
                   SUBMIT
               ----------------------------------------- */}
 
-              <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="mt-8 pt-6 border-t border-[#E7ECE9] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#8A9590]">
                   Your information will be securely processed.
                 </p>
 
@@ -811,6 +938,7 @@ const SubmitGrievance = () => {
 
             </Card>
 
+
             {/* =========================================
                 INFORMATION PANEL
             ========================================= */}
@@ -818,11 +946,12 @@ const SubmitGrievance = () => {
             <div className="space-y-4">
 
               {/* AI ROUTING */}
+
               <Card>
 
                 <div className="flex items-start gap-3">
 
-                  <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-[#ABD1C6] text-[#312F2C] flex items-center justify-center shrink-0">
 
                     <Sparkles size={18} />
 
@@ -830,11 +959,11 @@ const SubmitGrievance = () => {
 
                   <div>
 
-                    <h3 className="text-sm font-semibold text-slate-900">
+                    <h3 className="text-sm font-semibold text-[#312F2C]">
                       AI-assisted routing
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                    <p className="mt-2 text-sm leading-6 text-[#7A8580]">
                       Your grievance will be analyzed to identify
                       its topic and category before being routed
                       to the appropriate department.
@@ -846,12 +975,14 @@ const SubmitGrievance = () => {
 
               </Card>
 
+
               {/* TIPS */}
+
               <Card>
 
                 <div className="flex items-start gap-3">
 
-                  <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-[#EEF1EF] text-[#626A67] flex items-center justify-center shrink-0">
 
                     <Info size={18} />
 
@@ -859,11 +990,11 @@ const SubmitGrievance = () => {
 
                   <div>
 
-                    <h3 className="text-sm font-semibold text-slate-900">
+                    <h3 className="text-sm font-semibold text-[#312F2C]">
                       Tips for a faster resolution
                     </h3>
 
-                    <ul className="mt-3 space-y-2 text-sm text-slate-500">
+                    <ul className="mt-3 space-y-2 text-sm text-[#7A8580]">
 
                       <li>
                         • Clearly describe the issue.
@@ -889,12 +1020,14 @@ const SubmitGrievance = () => {
 
               </Card>
 
+
               {/* PRIVACY */}
+
               <Card>
 
                 <div className="flex items-start gap-3">
 
-                  <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-[#E4F0EB] text-[#587F73] flex items-center justify-center shrink-0">
 
                     <ShieldCheck size={18} />
 
@@ -902,11 +1035,11 @@ const SubmitGrievance = () => {
 
                   <div>
 
-                    <h3 className="text-sm font-semibold text-slate-900">
+                    <h3 className="text-sm font-semibold text-[#312F2C]">
                       Your information
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                    <p className="mt-2 text-sm leading-6 text-[#7A8580]">
                       Only the information required to process
                       and resolve your grievance is collected.
                     </p>

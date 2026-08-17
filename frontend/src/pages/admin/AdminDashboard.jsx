@@ -21,25 +21,25 @@ const AdminDashboard = () => {
       label: "Total Grievances",
       value: adminStats.total,
       icon: FileText,
-      iconClass: "bg-blue-50 text-blue-700",
+      iconClass: "bg-[#E4F0EB] text-[#587F73]",
     },
     {
       label: "Pending",
       value: adminStats.pending,
       icon: Clock3,
-      iconClass: "bg-amber-50 text-amber-700",
+      iconClass: "bg-[#F8F1E5] text-[#9A7435]",
     },
     {
       label: "In Progress",
       value: adminStats.inProgress,
       icon: AlertTriangle,
-      iconClass: "bg-indigo-50 text-indigo-700",
+      iconClass: "bg-[#F0F6F3] text-[#587F73]",
     },
     {
       label: "Resolved",
       value: adminStats.resolved,
       icon: CheckCircle2,
-      iconClass: "bg-emerald-50 text-emerald-700",
+      iconClass: "bg-[#E4F0EB] text-[#4B6D63]",
     },
   ];
 
@@ -56,18 +56,19 @@ const AdminDashboard = () => {
 
         {/* Header */}
         <div>
-          <p className="text-sm font-medium text-blue-700">
+          <p className="text-sm font-medium text-[#587F73]">
             Administration
           </p>
 
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#312F2C]">
             System Overview
           </h1>
 
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-[#626A67]">
             Monitor grievance activity and department performance.
           </p>
         </div>
+
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
@@ -81,11 +82,11 @@ const AdminDashboard = () => {
                 <div className="flex items-start justify-between">
 
                   <div>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-[#7A8580]">
                       {stat.label}
                     </p>
 
-                    <p className="mt-2 text-3xl font-bold text-slate-900">
+                    <p className="mt-2 text-3xl font-bold text-[#312F2C]">
                       {stat.value.toLocaleString()}
                     </p>
                   </div>
@@ -108,31 +109,35 @@ const AdminDashboard = () => {
 
         </div>
 
+
         {/* Resolution Rate */}
         <Card className="mt-6">
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
             <div>
-              <p className="text-sm font-medium text-slate-900">
+
+              <p className="text-sm font-medium text-[#312F2C]">
                 Resolution Rate
               </p>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[#7A8580]">
                 Percentage of grievances successfully resolved.
               </p>
+
             </div>
 
-            <p className="text-3xl font-bold text-emerald-600">
+            <p className="text-3xl font-bold text-[#587F73]">
               {adminStats.resolutionRate}%
             </p>
 
           </div>
 
-          <div className="mt-4 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+
+          <div className="mt-4 h-2.5 rounded-full bg-[#EEF1EF] overflow-hidden">
 
             <div
-              className="h-full rounded-full bg-emerald-500"
+              className="h-full rounded-full bg-[#587F73]"
               style={{
                 width: `${adminStats.resolutionRate}%`,
               }}
@@ -142,30 +147,38 @@ const AdminDashboard = () => {
 
         </Card>
 
+
         {/* Main sections */}
         <div className="grid xl:grid-cols-2 gap-6 mt-6">
 
-          {/* Categories */}
+
+          {/* =================================================
+              CATEGORIES
+          ================================================= */}
+
           <Card>
 
             <div className="flex items-center justify-between">
 
               <div>
-                <h2 className="text-lg font-semibold text-slate-900">
+
+                <h2 className="text-lg font-semibold text-[#312F2C]">
                   Top Categories
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[#7A8580]">
                   Most frequently reported grievance categories.
                 </p>
+
               </div>
 
               <ArrowRight
                 size={18}
-                className="text-slate-300"
+                className="text-[#8A9590]"
               />
 
             </div>
+
 
             <div className="mt-6 space-y-5">
 
@@ -180,20 +193,21 @@ const AdminDashboard = () => {
 
                     <div className="flex items-center justify-between text-sm">
 
-                      <span className="font-medium text-slate-700">
+                      <span className="font-medium text-[#626A67]">
                         {category.name}
                       </span>
 
-                      <span className="text-slate-500">
+                      <span className="text-[#7A8580]">
                         {category.value}
                       </span>
 
                     </div>
 
-                    <div className="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden">
+
+                    <div className="mt-2 h-2 rounded-full bg-[#EEF1EF] overflow-hidden">
 
                       <div
-                        className="h-full rounded-full bg-blue-600"
+                        className="h-full rounded-full bg-[#587F73]"
                         style={{
                           width: `${percentage}%`,
                         }}
@@ -209,18 +223,25 @@ const AdminDashboard = () => {
 
           </Card>
 
-          {/* Departments */}
+
+          {/* =================================================
+              DEPARTMENTS
+          ================================================= */}
+
           <Card>
 
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">
+
+              <h2 className="text-lg font-semibold text-[#312F2C]">
                 Department Performance
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-[#7A8580]">
                 Current workload across departments.
               </p>
+
             </div>
+
 
             <div className="mt-6 space-y-4">
 
@@ -228,28 +249,39 @@ const AdminDashboard = () => {
 
                 <div
                   key={department.department}
-                  className="flex items-center justify-between gap-4"
+                  className="
+                    flex
+                    items-center
+                    justify-between
+                    gap-4
+                    rounded-lg
+                    px-3
+                    py-3
+                    hover:bg-[#F4F7F5]
+                    transition
+                  "
                 >
 
                   <div className="min-w-0">
 
-                    <p className="text-sm font-medium text-slate-800 truncate">
+                    <p className="text-sm font-medium text-[#312F2C] truncate">
                       {department.department}
                     </p>
 
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs text-[#8A9590]">
                       {department.assigned} assigned
                     </p>
 
                   </div>
 
+
                   <div className="text-right">
 
-                    <p className="text-sm font-semibold text-emerald-600">
+                    <p className="text-sm font-semibold text-[#587F73]">
                       {department.resolved} resolved
                     </p>
 
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs text-[#8A9590]">
                       {department.pending} pending
                     </p>
 

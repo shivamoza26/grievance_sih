@@ -19,8 +19,11 @@ const PriorityBadge = ({ priority }) => {
     },
   };
 
+  const normalizedPriority =
+    priority?.toUpperCase();
+
   const config =
-    styles[priority] || {
+    styles[normalizedPriority] || {
       label: priority || "Unknown",
       className:
         "bg-[#EEF1EF] text-[#626A67] border-[#D9DEDB]",
@@ -42,7 +45,15 @@ const PriorityBadge = ({ priority }) => {
         ${config.className}
       `}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+      <span
+        className="
+          w-1.5
+          h-1.5
+          rounded-full
+          bg-current
+          opacity-70
+        "
+      />
 
       {config.label}
     </span>

@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import {
   LayoutDashboard,
   FileText,
@@ -15,7 +20,13 @@ import {
 
 const Sidebar = ({ role = "citizen" }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // =====================================================
+  // NAVIGATION
+  // =====================================================
 
   const navigation = {
     citizen: [
@@ -78,44 +89,115 @@ const Sidebar = ({ role = "citizen" }) => {
     ],
   };
 
-  const items = navigation[role] || navigation.citizen;
+  const items =
+    navigation[role] || navigation.citizen;
+
+  // =====================================================
+  // ACTIVE ROUTE
+  // =====================================================
 
   const isActive = (path) => {
     return location.pathname === path;
   };
 
+  // =====================================================
+  // MOBILE MENU
+  // =====================================================
+
   const closeMobileMenu = () => {
     setMobileOpen(false);
   };
 
+  // =====================================================
+  // SETTINGS
+  // =====================================================
+
+  const handleSettings = () => {
+    closeMobileMenu();
+
+    navigate("/settings");
+  };
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userRole");
+
+    closeMobileMenu();
+
+    navigate("/login");
+  };
+
+  // =====================================================
+  // SIDEBAR CONTENT
+  // =====================================================
+
   const sidebarContent = (
     <>
       {/* =====================================================
-          LOGO
+          LOGO / BRAND
       ===================================================== */}
 
-      <div className="h-16 px-6 flex items-center border-b border-[#4A4744]">
-
+      <div
+        className="
+          h-16
+          px-6
+          flex
+          items-center
+          border-b
+          border-[#4A4744]
+          flex-shrink-0
+        "
+      >
         <div className="flex items-center gap-3">
 
-          <div className="w-9 h-9 bg-[#ABD1C6] text-[#312F2C] flex items-center justify-center font-bold">
+          {/* Logo */}
+
+          <div
+            className="
+              w-9
+              h-9
+              bg-[#ABD1C6]
+              text-[#312F2C]
+              flex
+              items-center
+              justify-center
+              font-bold
+              rounded-sm
+            "
+          >
             G
           </div>
 
-          <div>
+          {/* Brand */}
 
-            <h1 className="font-semibold tracking-tight !text-white">
+          <div>
+            <h1
+              className="
+                font-semibold
+                tracking-tight
+                !text-white
+              "
+            >
               Grievance AI
             </h1>
 
-            <p className="text-[10px] text-[#A1C6B9] uppercase tracking-wider">
+            <p
+              className="
+                text-[10px]
+                text-[#A1C6B9]
+                uppercase
+                tracking-wider
+              "
+            >
               Public Service Platform
             </p>
-
           </div>
 
         </div>
-
       </div>
 
 
@@ -123,11 +205,29 @@ const Sidebar = ({ role = "citizen" }) => {
           NAVIGATION
       ===================================================== */}
 
-      <nav className="flex-1 px-3 py-6">
+      <nav
+        className="
+          flex-1
+          px-3
+          py-6
+          overflow-y-auto
+        "
+      >
 
-        <p className="px-3 mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#939C98]">
+        <p
+          className="
+            px-3
+            mb-3
+            text-[11px]
+            font-semibold
+            uppercase
+            tracking-wider
+            text-[#939C98]
+          "
+        >
           Workspace
         </p>
+
 
         <div className="space-y-1">
 
@@ -142,14 +242,28 @@ const Sidebar = ({ role = "citizen" }) => {
                 to={item.path}
                 onClick={closeMobileMenu}
                 className={`
-                  flex items-center gap-3
-                  px-3 py-2.5
+                  flex
+                  items-center
+                  gap-3
+                  px-3
+                  py-2.5
                   text-sm
-                  transition
+                  rounded-md
+                  transition-all
+                  duration-200
+
                   ${
                     active
-                      ? "bg-[#ABD1C6] !text-[#312F2C] font-semibold"
-                      : "!text-[#C8CFCC] hover:bg-[#403D3A] hover:!text-white"
+                      ? `
+                        bg-[#ABD1C6]
+                        !text-[#312F2C]
+                        font-semibold
+                      `
+                      : `
+                        !text-[#C8CFCC]
+                        hover:bg-[#403D3A]
+                        hover:!text-white
+                      `
                   }
                 `}
               >
@@ -187,33 +301,75 @@ const Sidebar = ({ role = "citizen" }) => {
           BOTTOM ACTIONS
       ===================================================== */}
 
-      <div className="p-3 border-t border-[#4A4744]">
+      <div
+        className="
+          p-3
+          border-t
+          border-[#4A4744]
+          flex-shrink-0
+        "
+      >
 
-        {/* Settings */}
+        {/* =================================================
+            SETTINGS
+        ================================================= */}
 
         <button
           type="button"
-          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm !text-[#AEB7B3] hover:bg-[#403D3A] hover:!text-white transition"
+          onClick={handleSettings}
+          className="
+            w-full
+            flex
+            items-center
+            gap-3
+            px-3
+            py-2.5
+            rounded-md
+            text-sm
+            !text-[#AEB7B3]
+            hover:bg-[#403D3A]
+            hover:!text-[#ABD1C6]
+            transition
+            text-left
+          "
         >
-
           <Settings size={18} />
 
-          <span>Settings</span>
-
+          <span>
+            Settings
+          </span>
         </button>
 
 
-        {/* Logout */}
+        {/* =================================================
+            LOGOUT
+        ================================================= */}
 
         <button
           type="button"
-          className="w-full mt-1 flex items-center gap-3 px-3 py-2.5 text-sm !text-[#AEB7B3] hover:bg-[#493B38] hover:!text-white transition"
+          onClick={handleLogout}
+          className="
+            w-full
+            mt-1
+            flex
+            items-center
+            gap-3
+            px-3
+            py-2.5
+            rounded-md
+            text-sm
+            !text-[#AEB7B3]
+            hover:bg-[#493B38]
+            hover:!text-[#E6B5AE]
+            transition
+            text-left
+          "
         >
-
           <LogOut size={18} />
 
-          <span>Logout</span>
-
+          <span>
+            Logout
+          </span>
         </button>
 
       </div>
@@ -221,16 +377,32 @@ const Sidebar = ({ role = "citizen" }) => {
   );
 
 
+  // =====================================================
+  // RETURN
+  // =====================================================
+
   return (
     <>
       {/* =====================================================
           DESKTOP SIDEBAR
       ===================================================== */}
 
-      <aside className="hidden lg:flex w-64 bg-[#312F2C] !text-white min-h-screen flex-col fixed left-0 top-0 z-40">
-
+      <aside
+        className="
+          hidden
+          lg:flex
+          w-64
+          bg-[#312F2C]
+          !text-white
+          min-h-screen
+          flex-col
+          fixed
+          left-0
+          top-0
+          z-40
+        "
+      >
         {sidebarContent}
-
       </aside>
 
 
@@ -242,14 +414,29 @@ const Sidebar = ({ role = "citizen" }) => {
         type="button"
         onClick={() => setMobileOpen(true)}
         aria-label="Open navigation menu"
-        className="lg:hidden fixed left-4 top-3.5 z-50 w-9 h-9 bg-[#312F2C] !text-white flex items-center justify-center shadow-md hover:bg-[#211F1D] transition"
+        className="
+          lg:hidden
+          fixed
+          left-4
+          top-3.5
+          z-50
+          w-9
+          h-9
+          bg-[#312F2C]
+          !text-white
+          flex
+          items-center
+          justify-center
+          rounded-lg
+          shadow-md
+          hover:bg-[#211F1D]
+          transition
+        "
       >
-
         <Menu
           size={19}
           className="!text-white"
         />
-
       </button>
 
 
@@ -259,7 +446,14 @@ const Sidebar = ({ role = "citizen" }) => {
 
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-50 bg-[#312F2C]/50 backdrop-blur-[2px]"
+          className="
+            lg:hidden
+            fixed
+            inset-0
+            z-50
+            bg-[#312F2C]/50
+            backdrop-blur-[2px]
+          "
           onClick={closeMobileMenu}
         />
       )}
@@ -286,6 +480,7 @@ const Sidebar = ({ role = "citizen" }) => {
           transition-transform
           duration-300
           ease-out
+
           ${
             mobileOpen
               ? "translate-x-0"
@@ -300,21 +495,32 @@ const Sidebar = ({ role = "citizen" }) => {
           type="button"
           onClick={closeMobileMenu}
           aria-label="Close navigation menu"
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center !text-[#AEB7B3] hover:bg-[#403D3A] hover:!text-white transition"
+          className="
+            absolute
+            top-4
+            right-4
+            w-8
+            h-8
+            flex
+            items-center
+            justify-center
+            rounded-md
+            !text-[#AEB7B3]
+            hover:bg-[#403D3A]
+            hover:!text-white
+            transition
+            z-10
+          "
         >
-
           <X
             size={19}
             className="!text-current"
           />
-
         </button>
-
 
         {sidebarContent}
 
       </aside>
-
     </>
   );
 };

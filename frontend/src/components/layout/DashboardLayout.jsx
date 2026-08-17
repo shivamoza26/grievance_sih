@@ -12,20 +12,44 @@ const DashboardLayout = ({
   return (
     <div className="min-h-screen bg-[#F4F7F5]">
 
-      {/* Sidebar */}
+      {/* =================================================
+          SIDEBAR
+      ================================================= */}
+
       <Sidebar role={role} />
 
-      {/* Main application area */}
+
+      {/* =================================================
+          MAIN APPLICATION AREA
+      ================================================= */}
+
       <div className="lg:ml-64 min-h-screen">
 
-        {/* Top navigation */}
+        {/* =================================================
+            TOP NAVIGATION
+        ================================================= */}
+
         <Navbar
           userRole={roleName}
           userName={userName}
         />
 
-        {/* Page content */}
-        <main className="p-6 lg:p-8 max-w-[1600px] mx-auto">
+
+        {/* =================================================
+            PAGE CONTENT
+        ================================================= */}
+
+        <main
+          className="
+            w-full
+            px-4
+            py-6
+            sm:px-6
+            lg:px-8
+            max-w-[1600px]
+            mx-auto
+          "
+        >
           {children}
         </main>
 

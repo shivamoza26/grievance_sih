@@ -6,7 +6,6 @@ import {
   ArrowRight,
   MapPin,
   CalendarDays,
-  AlertTriangle,
 } from "lucide-react";
 
 import DashboardLayout from "../../components/layout/DashboardLayout";
@@ -16,12 +15,10 @@ import PriorityBadge from "../../components/common/PriorityBadge";
 
 import { officerGrievances } from "../../mocks/officerGrievances";
 
-const AssignedGrievances = ({ priorityOnly = false }) => {
+const AdminGrievances = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
-  const [priorityFilter, setPriorityFilter] = useState(
-    priorityOnly ? "HIGH" : "ALL"
-  );
+  const [priorityFilter, setPriorityFilter] = useState("ALL");
   const [categoryFilter, setCategoryFilter] = useState("ALL");
 
   // =====================================================
@@ -35,7 +32,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
   ];
 
   // =====================================================
-  // FILTER
+  // FILTER GRIEVANCES
   // =====================================================
 
   const filteredGrievances = useMemo(() => {
@@ -49,13 +46,13 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
         grievance.title
           ?.toLowerCase()
           .includes(searchValue) ||
-        grievance.description
+        grievance.citizen
           ?.toLowerCase()
           .includes(searchValue) ||
         grievance.department
           ?.toLowerCase()
           .includes(searchValue) ||
-        grievance.citizen
+        grievance.location
           ?.toLowerCase()
           .includes(searchValue);
 
@@ -63,10 +60,9 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
         statusFilter === "ALL" ||
         grievance.status === statusFilter;
 
-      const matchesPriority = priorityOnly
-        ? grievance.priority === "HIGH"
-        : priorityFilter === "ALL" ||
-          grievance.priority === priorityFilter;
+      const matchesPriority =
+        priorityFilter === "ALL" ||
+        grievance.priority === priorityFilter;
 
       const matchesCategory =
         categoryFilter === "ALL" ||
@@ -84,13 +80,12 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
     statusFilter,
     priorityFilter,
     categoryFilter,
-    priorityOnly,
   ]);
 
   return (
     <DashboardLayout
-      role="officer"
-      userName="Officer"
+      role="admin"
+      userName="Admin"
     >
       <div className="max-w-7xl mx-auto">
 
@@ -101,58 +96,23 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
         <div>
 
           <p className="text-sm font-medium text-[#587F73]">
-            Officer Workspace
+            Administration
           </p>
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#312F2C]">
+            All Grievances
+          </h1>
 
-            <div>
-
-              <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#312F2C]">
-                {priorityOnly
-                  ? "Priority Queue"
-                  : "Assigned Grievances"}
-              </h1>
-
-              <p className="mt-2 text-[#626A67]">
-                {priorityOnly
-                  ? "Review high-priority grievances that need immediate attention."
-                  : "Review and manage grievances assigned to your department."}
-              </p>
-
-            </div>
-
-            {priorityOnly && (
-              <div
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  self-start
-                  rounded-lg
-                  border
-                  border-[#E4CACA]
-                  bg-[#F9F1F0]
-                  px-3
-                  py-2
-                  text-xs
-                  font-semibold
-                  text-[#A34F4F]
-                "
-              >
-                <AlertTriangle size={14} />
-
-                High Priority Only
-              </div>
-            )}
-
-          </div>
+          <p className="mt-2 text-[#626A67]">
+            View and manage grievances submitted across the
+            system.
+          </p>
 
         </div>
 
 
         {/* =================================================
-            FILTERS
+            FILTER CARD
         ================================================= */}
 
         <Card className="mt-8">
@@ -165,15 +125,24 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
             />
 
             <h2 className="text-sm font-semibold text-[#312F2C]">
-              Find a grievance
+              Search & Filter
             </h2>
 
           </div>
 
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_170px_170px_180px] gap-3">
+          <div
+            className="
+              grid
+              md:grid-cols-2
+              lg:grid-cols-[1fr_160px_160px_180px]
+              gap-3
+            "
+          >
 
-            {/* SEARCH */}
+            {/* =================================================
+                SEARCH
+            ================================================= */}
 
             <div className="relative">
 
@@ -194,7 +163,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                 onChange={(event) =>
                   setSearch(event.target.value)
                 }
-                placeholder="Search ID, title, citizen or department..."
+                placeholder="Search grievance, citizen, location or department..."
                 className="
                   w-full
                   rounded-lg
@@ -218,7 +187,9 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
             </div>
 
 
-            {/* STATUS */}
+            {/* =================================================
+                STATUS
+            ================================================= */}
 
             <select
               value={statusFilter}
@@ -242,7 +213,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
             >
 
               <option value="ALL">
-                All statuses
+                All Status
               </option>
 
               <option value="PENDING">
@@ -261,22 +232,23 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                 Rejected
               </option>
 
+              <option value="CLOSED">
+                Closed
+              </option>
+
             </select>
 
 
-            {/* PRIORITY */}
+            {/* =================================================
+                PRIORITY
+            ================================================= */}
 
             <select
-              value={
-                priorityOnly
-                  ? "HIGH"
-                  : priorityFilter
-              }
-              disabled={priorityOnly}
+              value={priorityFilter}
               onChange={(event) =>
                 setPriorityFilter(event.target.value)
               }
-              className={`
+              className="
                 rounded-lg
                 border
                 border-[#C8D2CE]
@@ -289,16 +261,11 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                 focus:border-[#587F73]
                 focus:ring-2
                 focus:ring-[#ABD1C6]/50
-                ${
-                  priorityOnly
-                    ? "cursor-not-allowed bg-[#F4F7F5] text-[#587F73]"
-                    : ""
-                }
-              `}
+              "
             >
 
               <option value="ALL">
-                All priorities
+                All Priority
               </option>
 
               <option value="HIGH">
@@ -316,7 +283,9 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
             </select>
 
 
-            {/* CATEGORY */}
+            {/* =================================================
+                CATEGORY
+            ================================================= */}
 
             <select
               value={categoryFilter}
@@ -340,7 +309,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
             >
 
               <option value="ALL">
-                All categories
+                All Categories
               </option>
 
               {categories.map((category) => (
@@ -360,7 +329,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
 
         {/* =================================================
-            RESULTS COUNT
+            RESULTS
         ================================================= */}
 
         <div className="mt-6">
@@ -371,13 +340,11 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
               Showing{" "}
 
-              <span className="font-medium text-[#312F2C]">
+              <span className="font-semibold text-[#312F2C]">
                 {filteredGrievances.length}
               </span>{" "}
 
-              {priorityOnly
-                ? "high-priority grievances"
-                : filteredGrievances.length === 1
+              {filteredGrievances.length === 1
                 ? "grievance"
                 : "grievances"}
 
@@ -387,7 +354,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
 
           {/* =================================================
-              LIST
+              GRIEVANCE LIST
           ================================================= */}
 
           {filteredGrievances.length > 0 ? (
@@ -396,9 +363,14 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
               {filteredGrievances.map((grievance) => (
 
+                /*
+                 * IMPORTANT:
+                 * Admin grievance now goes to the ADMIN
+                 * grievance details route.
+                 */
                 <Link
                   key={grievance.id}
-                  to={`/officer/grievances/${grievance.id}`}
+                  to={`/admin/grievances/${grievance.id}`}
                   className="block"
                 >
 
@@ -412,15 +384,31 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                     "
                   >
 
-                    <div className="flex flex-col xl:flex-row xl:items-center gap-5">
+                    <div
+                      className="
+                        flex
+                        flex-col
+                        xl:flex-row
+                        xl:items-center
+                        gap-5
+                      "
+                    >
 
-                      {/* MAIN */}
+                      {/* =================================================
+                          MAIN INFORMATION
+                      ================================================= */}
 
                       <div className="flex-1 min-w-0">
 
                         <div className="flex items-center gap-3 flex-wrap">
 
-                          <span className="text-xs font-semibold text-[#8A9590]">
+                          <span
+                            className="
+                              text-xs
+                              font-semibold
+                              text-[#8A9590]
+                            "
+                          >
                             {grievance.id}
                           </span>
 
@@ -435,20 +423,37 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                         </div>
 
 
-                        <h3 className="mt-2 text-base font-semibold text-[#312F2C]">
+                        <h3
+                          className="
+                            mt-2
+                            text-base
+                            font-semibold
+                            text-[#312F2C]
+                          "
+                        >
                           {grievance.title}
                         </h3>
 
 
-                        <p className="mt-1 text-sm text-[#7A8580] line-clamp-2">
+                        <p
+                          className="
+                            mt-1
+                            text-sm
+                            text-[#7A8580]
+                            line-clamp-2
+                          "
+                        >
                           {grievance.aiSummary ||
-                            grievance.description}
+                            grievance.description ||
+                            "No description available."}
                         </p>
 
                       </div>
 
 
-                      {/* METADATA */}
+                      {/* =================================================
+                          METADATA
+                      ================================================= */}
 
                       <div
                         className="
@@ -481,7 +486,15 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
                         <div>
 
-                          <div className="flex items-center gap-1.5 text-xs text-[#8A9590]">
+                          <div
+                            className="
+                              flex
+                              items-center
+                              gap-1.5
+                              text-xs
+                              text-[#8A9590]
+                            "
+                          >
 
                             <MapPin size={13} />
 
@@ -500,7 +513,15 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
                         <div>
 
-                          <div className="flex items-center gap-1.5 text-xs text-[#8A9590]">
+                          <div
+                            className="
+                              flex
+                              items-center
+                              gap-1.5
+                              text-xs
+                              text-[#8A9590]
+                            "
+                          >
 
                             <CalendarDays size={13} />
 
@@ -515,25 +536,7 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                         </div>
 
 
-                        {/* AI CONFIDENCE */}
-
-                        <div className="hidden xl:block">
-
-                          <p className="text-xs text-[#8A9590]">
-                            AI Confidence
-                          </p>
-
-                          <p className="mt-1 font-semibold text-[#587F73]">
-
-                            {Math.round(
-                              (grievance.confidence || 0) * 100
-                            )}
-                            %
-
-                          </p>
-
-                        </div>
-
+                        {/* ARROW */}
 
                         <ArrowRight
                           size={19}
@@ -558,6 +561,10 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
 
           ) : (
 
+            /* =================================================
+               EMPTY STATE
+            ================================================= */
+
             <Card>
 
               <div className="py-12 text-center">
@@ -569,27 +576,40 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
                     h-12
                     rounded-full
                     bg-[#EEF1EF]
+                    text-[#7A8580]
                     flex
                     items-center
                     justify-center
-                    text-[#7A8580]
                   "
                 >
+
                   <Search size={21} />
+
                 </div>
 
 
-                <h3 className="mt-4 font-semibold text-[#312F2C]">
+                <h3
+                  className="
+                    mt-4
+                    font-semibold
+                    text-[#312F2C]
+                  "
+                >
                   No grievances found
                 </h3>
 
 
-                <p className="mt-2 text-sm text-[#7A8580] max-w-sm mx-auto">
-
-                  {priorityOnly
-                    ? "There are currently no high-priority grievances matching your search and filters."
-                    : "Try changing your search or filters to find what you're looking for."}
-
+                <p
+                  className="
+                    mt-2
+                    text-sm
+                    text-[#7A8580]
+                    max-w-sm
+                    mx-auto
+                  "
+                >
+                  Try changing your search or filters to
+                  find what you're looking for.
                 </p>
 
               </div>
@@ -605,4 +625,4 @@ const AssignedGrievances = ({ priorityOnly = false }) => {
   );
 };
 
-export default AssignedGrievances;
+export default AdminGrievances;

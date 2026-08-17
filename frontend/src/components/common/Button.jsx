@@ -1,6 +1,4 @@
-import {
-  Loader2,
-} from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const Button = ({
   children,
@@ -14,20 +12,29 @@ const Button = ({
   onClick,
 }) => {
   const variants = {
+    // Main action
     primary:
-      "bg-[#312F2C] !text-white hover:bg-[#211F1D] shadow-sm",
+      "bg-[#587F73] !text-white hover:bg-[#4B6D63] shadow-sm",
 
+    // Light secondary action
     secondary:
       "bg-white !text-[#312F2C] border border-[#C8D2CE] hover:bg-[#F4F7F5]",
 
+    // Minimal action
     ghost:
-      "!text-[#626A67] hover:bg-[#EDF2EF] hover:!text-[#312F2C]",
+      "!text-[#587F73] hover:bg-[#E8F2EF] hover:!text-[#312F2C]",
 
+    // Destructive action
     danger:
       "bg-[#A34F4F] !text-white hover:bg-[#8F4141] shadow-sm",
 
+    // Positive/success action
     success:
-      "bg-[#587F73] !text-white hover:bg-[#4B6D63] shadow-sm",
+      "bg-[#405E55] !text-white hover:bg-[#354F47] shadow-sm",
+
+    // Dark Jet action
+    dark:
+      "bg-[#312F2C] !text-white hover:bg-[#211F1D] shadow-sm",
   };
 
   const sizes = {
@@ -50,27 +57,37 @@ const Button = ({
         font-medium
         transition-all
         duration-200
+
         focus-visible:outline-none
         focus-visible:ring-2
         focus-visible:ring-[#587F73]
         focus-visible:ring-offset-2
+
         disabled:opacity-50
         disabled:pointer-events-none
+
         ${variants[variant] || variants.primary}
         ${sizes[size] || sizes.md}
         ${className}
       `}
     >
       {loading ? (
-        <Loader2
-          size={16}
-          className="animate-spin"
-        />
-      ) : (
-        Icon && <Icon size={16} />
-      )}
+        <>
+          <Loader2
+            size={16}
+            className="animate-spin"
+          />
 
-      {children}
+          <span>
+            Processing...
+          </span>
+        </>
+      ) : (
+        <>
+          {Icon && <Icon size={16} />}
+          {children}
+        </>
+      )}
     </button>
   );
 };

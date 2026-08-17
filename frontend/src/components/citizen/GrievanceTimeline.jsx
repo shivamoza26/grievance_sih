@@ -109,20 +109,26 @@ const GrievanceTimeline = ({ currentStatus }) => {
 
                   ${
                     isComplete
-                      ? "bg-blue-700 border-blue-700 text-white"
+                      ? "bg-[#587F73] border-[#587F73] text-white"
                       : isCurrent && isResolved
-                      ? "bg-emerald-50 border-emerald-500 text-emerald-600"
+                      ? "bg-[#E4F0EB] border-[#587F73] text-[#587F73]"
                       : isCurrent
-                      ? "bg-blue-50 border-blue-600 text-blue-700"
-                      : "bg-white border-slate-200 text-slate-300"
+                      ? "bg-[#F0F6F3] border-[#587F73] text-[#587F73]"
+                      : "bg-white border-[#DDE3E0] text-[#B3BCB8]"
                   }
                 `}
               >
 
                 {isComplete ? (
-                  <Check size={17} strokeWidth={2.5} />
+                  <Check
+                    size={17}
+                    strokeWidth={2.5}
+                  />
                 ) : isCurrent && isResolved ? (
-                  <Check size={17} strokeWidth={2.5} />
+                  <Check
+                    size={17}
+                    strokeWidth={2.5}
+                  />
                 ) : isCurrent ? (
                   <Clock3 size={17} />
                 ) : (
@@ -134,6 +140,7 @@ const GrievanceTimeline = ({ currentStatus }) => {
                 )}
 
               </div>
+
 
               {/* Connector */}
 
@@ -147,14 +154,15 @@ const GrievanceTimeline = ({ currentStatus }) => {
 
                     ${
                       index < currentIndex
-                        ? "bg-blue-600"
-                        : "bg-slate-200"
+                        ? "bg-[#587F73]"
+                        : "bg-[#DDE3E0]"
                     }
                   `}
                 />
               )}
 
             </div>
+
 
             {/* ==========================================
                 STEP CONTENT
@@ -171,35 +179,64 @@ const GrievanceTimeline = ({ currentStatus }) => {
 
                     ${
                       isComplete
-                        ? "text-slate-900"
+                        ? "text-[#312F2C]"
                         : isCurrent && isResolved
-                        ? "text-emerald-700"
+                        ? "text-[#4B6D63]"
                         : isCurrent
-                        ? "text-blue-700"
-                        : "text-slate-400"
+                        ? "text-[#587F73]"
+                        : "text-[#9AA39F]"
                     }
                   `}
                 >
                   {step.title}
                 </h3>
 
+
                 {/* CURRENT LABEL */}
 
                 {isCurrent && !isResolved && (
-                  <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                  <span
+                    className="
+                      inline-flex
+                      items-center
+                      rounded-full
+                      bg-[#E4F0EB]
+                      px-2
+                      py-0.5
+                      text-[10px]
+                      font-semibold
+                      text-[#587F73]
+                    "
+                  >
                     CURRENT
                   </span>
                 )}
 
+
                 {/* RESOLVED LABEL */}
 
                 {isCurrent && isResolved && (
-                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                  <span
+                    className="
+                      inline-flex
+                      items-center
+                      rounded-full
+                      bg-[#DCEBE5]
+                      px-2
+                      py-0.5
+                      text-[10px]
+                      font-semibold
+                      text-[#4B6D63]
+                    "
+                  >
                     COMPLETED
                   </span>
                 )}
 
               </div>
+
+
+              {/* DESCRIPTION */}
 
               <p
                 className={`
@@ -209,18 +246,35 @@ const GrievanceTimeline = ({ currentStatus }) => {
 
                   ${
                     isComplete || isCurrent
-                      ? "text-slate-500"
-                      : "text-slate-400"
+                      ? "text-[#7A8580]"
+                      : "text-[#A0AAA5]"
                   }
                 `}
               >
                 {step.description}
               </p>
 
+
               {/* CURRENT STATUS MESSAGE */}
 
               {isCurrent && !isResolved && (
-                <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700">
+                <div
+                  className="
+                    mt-3
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-lg
+                    bg-[#F0F6F3]
+                    border
+                    border-[#D7E8E1]
+                    px-3
+                    py-2
+                    text-xs
+                    font-medium
+                    text-[#587F73]
+                  "
+                >
 
                   <Clock3 size={13} />
 
@@ -229,10 +283,27 @@ const GrievanceTimeline = ({ currentStatus }) => {
                 </div>
               )}
 
+
               {/* RESOLVED MESSAGE */}
 
               {isCurrent && isResolved && (
-                <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
+                <div
+                  className="
+                    mt-3
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-lg
+                    bg-[#E4F0EB]
+                    border
+                    border-[#C4DED4]
+                    px-3
+                    py-2
+                    text-xs
+                    font-medium
+                    text-[#4B6D63]
+                  "
+                >
 
                   <Check size={13} />
 
