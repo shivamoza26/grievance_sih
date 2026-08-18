@@ -13,4 +13,4 @@ dist/
 build/
 
 #models weight
-ml/models/
+ml/models/**/model.safetensors
