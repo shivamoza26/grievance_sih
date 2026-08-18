@@ -8,8 +8,20 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "accelerate>=1.14.0",
+    "datasets>=5.0.1",
+    "ipykernel>=7.3.0",
     "joblib>=1.5.3",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.11.1",
+    "numpy>=2.4.6",
+    "pandas>=3.0.5",
+    "peft>=0.20.0",
     "rapidfuzz>=3.14.5",
+    "scikit-learn>=1.9.0",
+    "seaborn>=0.13.2",
+    "torch>=2.13.0",
+    "transformers>=5.15.0",
 ]
 
 [project.scripts]
