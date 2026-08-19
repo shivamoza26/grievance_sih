@@ -103,7 +103,8 @@ def assert_can_view(
 
     if (
         user.role == "OFFICER"
-        and grievance.officer_id is not None
+        and grievance.officer is not None
+        and grievance.officer.user_id == user.id
     ):
         return
 
