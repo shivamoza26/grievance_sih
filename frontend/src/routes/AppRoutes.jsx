@@ -8,8 +8,8 @@ import {
 import Home from "../pages/Home";
 
 // Auth
-import Login from "../pages/auth/login.jsx";
-import Register from "../pages/auth/register.jsx";
+import Login from "../pages/auth/login";
+import Register from "../pages/auth/register";
 
 // Protection
 import ProtectedRoute from "./ProtectedRoute";
