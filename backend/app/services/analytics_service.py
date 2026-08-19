@@ -9,59 +9,56 @@ def get_admin_analytics(
     db: Session,
     location_filter: str | None = None,
 ) -> dict:
-
     query = db.query(Grievance)
 
     if location_filter:
         query = query.filter(
-            Grievance.location.ilike(
-                f"%{location_filter}%"
-            )
+            Grievance.location.ilike(f"%{location_filter}%")
         )
 
     grievances = query.all()
 
     total = len(grievances)
-
     status_counts: dict[str, int] = {}
     category_counts: dict[str, int] = {}
 
     for grievance in grievances:
-        status_counts[grievance.status] = (
-            status_counts.get(
-                grievance.status,
-                0,
-            ) + 1
-        )
+        status_counts[grievance.status] = status_counts.get(
+            grievance.status, 0
+        ) + 1
 
-        key = grievance.category or "Uncategorized"
+        category = grievance.category or "Uncategorized"
+        category_counts[category] = category_counts.get(category, 0) + 1
 
-        category_counts[key] = (
-            category_counts.get(
-                key,
-                0,
-            ) + 1
-        )
+    resolved = status_counts.get("RESOLVED", 0)
+    resolution_rate = round((resolved / total) * 100, 2) if total else 0.0
 
-    department_counts = (
-        db.query(
-            Department.name,
-            func.count(Grievance.id),
-        )
-        .outerjoin(
-            Grievance,
-            Grievance.department_id == Department.id,
-        )
-        .group_by(Department.name)
+    # Return department workload in a frontend-friendly shape.
+    departments = (
+        db.query(Department)
+        .order_by(Department.name.asc())
         .all()
     )
+
+    by_department = {}
+    for department in departments:
+        department_grievances = [
+            g for g in grievances if g.department_id == department.id
+        ]
+        assigned = len(department_grievances)
+        resolved_count = sum(
+            1 for g in department_grievances if g.status == "RESOLVED"
+        )
+        by_department[department.name] = {
+            "assigned": assigned,
+            "resolved": resolved_count,
+            "pending": max(assigned - resolved_count, 0),
+        }
 
     return {
         "total": total,
         "by_status": status_counts,
         "by_category": category_counts,
-        "by_department": {
-            name: count
-            for name, count in department_counts
-        },
+        "by_department": by_department,
+        "resolution_rate": resolution_rate,
     }

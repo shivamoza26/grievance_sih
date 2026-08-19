@@ -12,15 +12,12 @@ dependencies = [
     "datasets>=5.0.1",
     "fastapi>=0.141.1",
     "httpx>=0.28.1",
-    "huggingface-hub>=1.28.0",
     "passlib>=1.7.4",
     "psycopg2-binary>=2.9.12",
     "pydantic[email]>=2.13.4",
     "python-jose[cryptography]>=3.5.0",
     "python-multipart>=0.0.32",
     "sqlalchemy>=2.0.52",
-    "torch>=2.13.0",
-    "transformers>=5.15.0",
     "uvicorn[standard]>=0.52.3",
 ]
 

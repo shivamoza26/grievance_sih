@@ -1,8 +1,8 @@
+from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
 from datetime import datetime
 
 from app.db.database import Base
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
-from sqlalchemy.orm import relationship
 
 
 class Grievance(Base):
@@ -20,16 +20,35 @@ class Grievance(Base):
 
     location = Column(String, nullable=True)
 
-    department_id = Column(Integer, ForeignKey("departments.id"), nullable=True)
+    department_id = Column(
+        Integer,
+        ForeignKey("departments.id"),
+        nullable=True
+    )
 
-    officer_id = Column(Integer, ForeignKey("officers.id"), nullable=True)
+    officer_id = Column(
+        Integer,
+        ForeignKey("officers.id"),
+        nullable=True
+    )
 
-    status = Column(String, nullable=False, default="SUBMITTED")
+    status = Column(
+        String,
+        nullable=False,
+        default="SUBMITTED"
+    )
 
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False
+    )
 
     updated_at = Column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+        nullable=False
     )
 
     citizen = relationship("User")

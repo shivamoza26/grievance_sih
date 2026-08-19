@@ -123,6 +123,7 @@ const Sidebar = ({ role = "citizen" }) => {
   // =====================================================
 
   const handleLogout = () => {
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("userRole");
 
