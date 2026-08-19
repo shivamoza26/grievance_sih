@@ -6,6 +6,20 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
+
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Card from "../../components/common/Card";
 
