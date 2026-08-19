@@ -1,59 +1,87 @@
-import httpx
+import json
+
+import torch
+from huggingface_hub import hf_hub_download
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+)
 
 from app.core.config import settings
 
 
-_MOCK_KEYWORD_MAP: dict[str, str] = {
-    "scholarship": "Education",
-    "school": "Education",
-    "college": "Education",
-    "water": "Water Supply",
-    "electricity": "Electricity",
-    "power": "Electricity",
-    "road": "Roads & Infrastructure",
-    "garbage": "Sanitation",
-    "waste": "Sanitation",
-    "hospital": "Health",
-    "medicine": "Health",
-    "pension": "Social Welfare",
-}
+class DepartmentClassifier:
+    def __init__(self, model_id: str):
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu"
+        )
 
-_DEFAULT_CATEGORY = "General"
+        print(f"Loading department model: {model_id}")
+        print(f"Using device: {self.device}")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+        self.model = AutoModelForSequenceClassification.from_pretrained(
+            model_id
+        )
+
+        self.model.to(self.device)
+        self.model.eval()
+
+        label_map_path = hf_hub_download(
+            repo_id=model_id,
+            filename="label_map.json",
+        )
+
+        with open(label_map_path, encoding="utf-8") as f:
+            self.label_map = json.load(f)
+
+        print("Department model loaded successfully.")
+
+    @torch.inference_mode()
+    def predict(self, text: str) -> dict:
+        inputs = self.tokenizer(
+            text,
+            return_tensors="pt",
+            truncation=True,
+            max_length=settings.ML_MAX_LENGTH,
+        )
+
+        inputs = {
+            key: value.to(self.device)
+            for key, value in inputs.items()
+        }
+
+        outputs = self.model(**inputs)
+
+        probabilities = torch.softmax(outputs.logits, dim=-1)
+
+        confidence, predicted_id = torch.max(
+            probabilities,
+            dim=-1,
+        )
+
+        predicted_id = predicted_id.item()
+        confidence = confidence.item()
+
+        department = self.label_map[str(predicted_id)]
+
+        return {
+            "department": department,
+            "confidence": confidence,
+        }
 
 
-def _mock_predict(text: str) -> dict:
-    lowered = text.lower()
-
-    for keyword, category in _MOCK_KEYWORD_MAP.items():
-        if keyword in lowered:
-            return {
-                "topic": category,
-                "category": category,
-                "confidence": 0.6,
-                "summary": text[:140],
-            }
-
-    return {
-        "topic": _DEFAULT_CATEGORY,
-        "category": _DEFAULT_CATEGORY,
-        "confidence": 0.3,
-        "summary": text[:140],
-    }
+department_classifier = DepartmentClassifier(
+    settings.ML_DEPARTMENT_MODEL
+)
 
 
 def get_prediction(text: str) -> dict:
-    if not settings.ML_SERVICE_URL:
-        return _mock_predict(text)
+    prediction = department_classifier.predict(text)
 
-    try:
-        response = httpx.post(
-            f"{settings.ML_SERVICE_URL.rstrip('/')}/predict",
-            json={"text": text},
-            timeout=settings.ML_SERVICE_TIMEOUT_SECONDS,
-        )
-
-        response.raise_for_status()
-        return response.json()
-
-    except (httpx.HTTPError, ValueError):
-        return _mock_predict(text)
+    return {
+        "topic": prediction["department"],
+        "category": prediction["department"],
+        "confidence": prediction["confidence"],
+    }
