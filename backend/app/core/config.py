@@ -8,42 +8,30 @@ class Settings:
     never get hardcoded/committed.
     """
 
-    PROJECT_NAME: str = (
-        "AI-Based Grievance Classification and Management System"
-    )
+    PROJECT_NAME: str = "AI-Based Grievance Classification and Management System"
 
     # JWT
-    SECRET_KEY: str = os.getenv(
-        "SECRET_KEY",
-        "dev-secret-change-me"
-    )
-    ALGORITHM: str = os.getenv(
-        "ALGORITHM",
-        "HS256"
-    )
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-secret-change-me")
+    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
-        os.getenv(
-            "ACCESS_TOKEN_EXPIRE_MINUTES",
-            "60"
-        )
+        os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60")
+    )
+    # ML
+    ML_DEPARTMENT_MODEL: str = os.getenv(
+        "ML_DEPARTMENT_MODEL",
+        "shivmexe/grievance-department-large",
     )
 
-    # ML service
-    ML_SERVICE_URL: str = os.getenv(
-        "ML_SERVICE_URL",
-        ""
-    )
-    ML_SERVICE_TIMEOUT_SECONDS: float = float(
+    ML_MAX_LENGTH: int = int(
         os.getenv(
-            "ML_SERVICE_TIMEOUT_SECONDS",
-            "5"
+            "ML_MAX_LENGTH",
+            "96",
         )
     )
-
     # CORS
     CORS_ORIGINS: list[str] = os.getenv(
         "CORS_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174"
+        "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174",
     ).split(",")
 
 

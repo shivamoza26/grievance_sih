@@ -1,11 +1,14 @@
-from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
-
 from app.models.grievance import Grievance
 from app.models.resolution_history import ResolutionHistory
 from app.models.user import User
 from app.schemas.grievance import GrievanceCreate
-from app.services import assignment_service, ml_service
+from app.services import (
+    assignment_service,
+    ml_service,
+    ranking_service,
+)
+from fastapi import HTTPException, status
+from sqlalchemy.orm import Session
 
 
 def create_grievance(
@@ -24,13 +27,31 @@ def create_grievance(
     db.add(grievance)
     db.flush()
 
-    prediction = ml_service.get_prediction(
-        payload.description
-    )
+    # ----------------------------------------
+    # Department classification
+    # ----------------------------------------
+
+    prediction = ml_service.get_prediction(payload.description)
 
     grievance.topic = prediction.get("topic")
+
     grievance.category = prediction.get("category")
+
     grievance.confidence = prediction.get("confidence")
+
+    # ----------------------------------------
+    # Urgency / priority classification
+    # ----------------------------------------
+
+    priority_prediction = ranking_service.get_prediction(payload.description)
+
+    grievance.priority = priority_prediction.get("priority")
+
+    grievance.priority_confidence = priority_prediction.get("confidence")
+
+    # ----------------------------------------
+    # Department + officer assignment
+    # ----------------------------------------
 
     department_id, officer_id = assignment_service.assign(
         db,
@@ -43,6 +64,10 @@ def create_grievance(
     if officer_id is not None:
         grievance.status = "ASSIGNED"
 
+    # ----------------------------------------
+    # Resolution history
+    # ----------------------------------------
+
     history = ResolutionHistory(
         grievance_id=grievance.id,
         old_status=None,
@@ -51,7 +76,8 @@ def create_grievance(
             "Grievance submitted"
             + (
                 f" and auto-assigned "
-                f"(category: {grievance.category})"
+                f"(category: {grievance.category}, "
+                f"priority: {grievance.priority})"
                 if officer_id
                 else ""
             )
@@ -72,11 +98,7 @@ def get_grievance(
     grievance_id: int,
 ) -> Grievance:
 
-    grievance = (
-        db.query(Grievance)
-        .filter(Grievance.id == grievance_id)
-        .first()
-    )
+    grievance = db.query(Grievance).filter(Grievance.id == grievance_id).first()
 
     if not grievance:
         raise HTTPException(
@@ -95,10 +117,7 @@ def assert_can_view(
     if user.role == "ADMIN":
         return
 
-    if (
-        user.role == "CITIZEN"
-        and grievance.citizen_id == user.id
-    ):
+    if user.role == "CITIZEN" and grievance.citizen_id == user.id:
         return
 
     if (
@@ -128,6 +147,7 @@ def update_status(
     )
 
     old_status = grievance.status
+
     grievance.status = new_status
 
     history = ResolutionHistory(
@@ -172,3 +192,4 @@ def add_reply(
     db.refresh(history)
 
     return history
+

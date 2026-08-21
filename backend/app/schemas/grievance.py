@@ -12,13 +12,21 @@ class GrievanceResponse(BaseModel):
     id: int
     citizen_id: int
     description: str
+
+    # Department classification
     topic: str | None
     category: str | None
     confidence: float | None
+
+    # Urgency / priority classification
+    priority: str | None
+    priority_confidence: float | None
+
     location: str | None
     department_id: int | None
     officer_id: int | None
     status: str
+
     created_at: datetime
     updated_at: datetime
 

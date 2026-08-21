@@ -1,19 +1,19 @@
-import json
-
 import torch
-from app.core.config import settings
-from huggingface_hub import hf_hub_download
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
 )
 
+MODEL_ID = "shivmexe/grievance-urgency-v1"
 
-class DepartmentClassifier:
+
+class UrgencyClassifier:
     def __init__(self, model_id: str):
+
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        print(f"Loading department model: {model_id}")
+        print(f"Loading urgency model: {model_id}")
+
         print(f"Using device: {self.device}")
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
@@ -23,26 +23,16 @@ class DepartmentClassifier:
         self.model.to(self.device)
         self.model.eval()
 
-        label_map_path = hf_hub_download(
-            repo_id=model_id,
-            filename="label_map.json",
-        )
-
-        with open(
-            label_map_path,
-            encoding="utf-8",
-        ) as f:
-            self.label_map = json.load(f)
-
-        print("Department model loaded successfully.")
+        print("Urgency model loaded successfully.")
 
     @torch.inference_mode()
     def predict(self, text: str) -> dict:
+
         inputs = self.tokenizer(
             text,
             return_tensors="pt",
             truncation=True,
-            max_length=settings.ML_MAX_LENGTH,
+            max_length=96,
         )
 
         inputs = {key: value.to(self.device) for key, value in inputs.items()}
@@ -52,33 +42,27 @@ class DepartmentClassifier:
         probabilities = torch.softmax(
             outputs.logits,
             dim=-1,
-        )
+        )[0]
 
-        confidence, predicted_id = torch.max(
-            probabilities,
-            dim=-1,
-        )
+        predicted_id = torch.argmax(probabilities).item()
 
-        predicted_id = predicted_id.item()
-        confidence = confidence.item()
+        confidence = probabilities[predicted_id].item()
 
-        department = self.label_map[str(predicted_id)]
-
+        priority = self.model.config.id2label[predicted_id]
         return {
-            "department": department,
+            "priority": priority,
             "confidence": confidence,
         }
 
 
-department_classifier = DepartmentClassifier(settings.ML_DEPARTMENT_MODEL)
+urgency_classifier = UrgencyClassifier(MODEL_ID)
 
 
 def get_prediction(text: str) -> dict:
-    prediction = department_classifier.predict(text)
+
+    prediction = urgency_classifier.predict(text)
 
     return {
-        "topic": prediction["department"],
-        "category": prediction["department"],
+        "priority": prediction["priority"],
         "confidence": prediction["confidence"],
     }
-

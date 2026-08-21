@@ -1,7 +1,7 @@
 {
   "backend": "tokenizers",
   "cls_token": "[CLS]",
-  "do_lower_case": false,
+  "do_lower_case": true,
   "is_local": false,
   "mask_token": "[MASK]",
   "model_max_length": 512,
